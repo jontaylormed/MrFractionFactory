@@ -1,0 +1,7 @@
+# OS and editor noise
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Local test-server config; points at a sibling project folder.
+.claude/
