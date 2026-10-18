@@ -1311,13 +1311,10 @@
     .fp-stepper button { width:40px; height:40px; border-radius:8px; border:1.5px solid var(--dy-border); background:var(--dy-bg2); color:var(--dy-text); font-size:14px; cursor:pointer; font-family:var(--font-body); }
     .fp-stepper button:hover:not(:disabled) { background:var(--dy-border); }
     .fp-stepper button:disabled, .fp-recut button:disabled { opacity:.35; cursor:not-allowed; }
-    .fp-brow-right { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
-    .fp-negsw { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:var(--dy-text); cursor:pointer; }
-    .fp-negsw[hidden] { display:none; }
-    .fp-negsw input, .fp-negmode input { width:20px; height:20px; accent-color:#2c2214; flex-shrink:0; margin:0; }
-    .fp-negmode { display:flex; align-items:flex-start; gap:10px; margin-bottom:14px; padding:10px 14px; background:var(--dy-bg2); border:1.5px solid var(--dy-border); border-radius:8px; cursor:pointer; font-size:14px; font-weight:700; color:var(--dy-text); line-height:1.4; }
-    .fp-negmode input { margin-top:1px; }
-    .fp-negmode small { display:block; font-size:12px; font-weight:400; color:var(--dy-muted); }
+    /* one box at the top of each fraction: tick it to put that fraction below zero */
+    .fp-negsw { display:flex; align-items:center; gap:8px; margin:-2px 0 10px; padding:8px 10px; min-height:40px; background:var(--dy-bg2); border:1.5px solid var(--dy-border); border-radius:8px; font-size:14px; font-weight:700; color:var(--dy-text); cursor:pointer; }
+    .fp-negsw span { font-weight:400; color:var(--dy-muted); }
+    .fp-negsw input { width:20px; height:20px; accent-color:#2c2214; flex-shrink:0; margin:0; }
     .fp-recut { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:2px 0 6px; padding:8px 10px; border-radius:8px; background:#edf7f1; border:1.5px dashed #7dbb96; }
     .fp-recut-lbl { font-size:12px; font-weight:700; color:#3a7a50; flex:1 1 150px; line-height:1.35; }
     .fp-recut-lbl small { display:block; font-weight:400; color:var(--dy-muted); }
@@ -3888,10 +3885,6 @@ filter:opacity(0.15)"></div>
     <div class="content-area">
       <div class="card">
         <div class="fp">
-          <label class="fp-negmode">
-            <input type="checkbox" id="fpNegMode">
-            <span>Use negative numbers<small>Adds a “Make negative” switch to each fraction. Adding and subtracting are then shown on a number line.</small></span>
-          </label>
           <div class="fp-row">
             <div class="fp-builder" id="bA"></div>
             <div class="fp-opcol" role="group" aria-label="Operation">
@@ -7884,8 +7877,9 @@ filter:opacity(0.15)"></div>
          starting fraction kept on screen.
        - Solve always works. For + and − it walks through compare → re-cut →
          combine → answer instead of disabling itself.
-       - Negatives are opt-in and drawn on a number line: a bar cannot show a
-         negative amount, and the old bars silently used absolute values.
+       - Each fraction has one "Negative" box at its top. Anything negative is
+         added or subtracted on a number line: a bar cannot show a negative
+         amount, and the old bars silently used absolute values.
        - Operation buttons are neutral ink with their names; the fraction
          colours (A blue, B red) are never used for an operation. */
     (function(){
@@ -7904,7 +7898,7 @@ filter:opacity(0.15)"></div>
       // n = pieces shaded (never negative), d = pieces in each whole; the sign lives in neg.
       const SA={id:'bA',label:'Fraction A',color:CA,d:4,n:1,neg:false,start:null};
       const SB={id:'bB',label:'Fraction B',color:CB,d:3,n:1,neg:false,start:null};
-      let activeOp='+', negMode=false, wt=null;
+      let activeOp='+', wt=null;
       let guideTimer=null, mismatchSeen=false;
       const pairsSaid=new Set();
 
@@ -7987,12 +7981,10 @@ filter:opacity(0.15)"></div>
       function initBuilder(s){
         const el=document.getElementById(s.id);
         el.innerHTML=`
+          <label class="fp-negsw"><input type="checkbox" id="${s.id}Neg"> Negative <span>(below zero)</span></label>
           <div class="fp-blabel-row">
             <div class="fp-blabel" style="color:${s.color};">${s.label}</div>
-            <div class="fp-brow-right">
-              <label class="fp-negsw" hidden><input type="checkbox" id="${s.id}Neg"> Make negative</label>
-              <button type="button" class="fp-clr" id="${s.id}Clr">Clear</button>
-            </div>
+            <button type="button" class="fp-clr" id="${s.id}Clr">Clear</button>
           </div>
           ${stepperHTML(s,'d','Pieces in each whole','makes a different fraction')}
           ${stepperHTML(s,'n','Pieces shaded','or tap the bars below')}
@@ -8043,7 +8035,6 @@ filter:opacity(0.15)"></div>
           ? `<span>Started as ${fracText((s.neg?-1:1)*s.start.n,s.start.d)} — same amount, in pieces ${s.d/s.start.d} times smaller</span><button type="button" class="fp-linkbtn" data-undo="1">↺ Undo re-cut</button>`
           : '';
         el.querySelector('.fp-fracval').innerHTML=fracHTML(signed(s),s.d,s.color,{words:true})+'<br>'+fracTypeHTML(s.n,s.d);
-        el.querySelector('.fp-negsw').hidden=!negMode;
         document.getElementById(s.id+'Neg').checked=s.neg;
       }
 
@@ -8157,7 +8148,7 @@ filter:opacity(0.15)"></div>
           shuffle(opts);
         }
         wt={steps,i:0,a,b,dA,dB,L,aL,bL,rL,op:activeOp,opts,pick:null,answered:false,
-            line:negMode||a<0||b<0||rL<0};
+            line:a<0||b<0||rL<0};
         renderWalk();
         resultArea().scrollIntoView({behavior:'smooth',block:'start'});
       }
@@ -8197,7 +8188,7 @@ filter:opacity(0.15)"></div>
             let why;
             if(w.op==='+') why=w.b>=0?'Adding a positive moves <b>right</b>.':'Adding a negative moves <b>left</b> — it works like taking away.';
             else why=w.b>=0?'Subtracting moves <b>left</b>.':'Subtracting a negative moves <b>right</b> — taking away a debt leaves you better off.';
-            const below=!negMode&&R<0?'You are taking away more than A has, so the answer goes <b>below zero</b>. ':'';
+            const below=w.a>=0&&w.b>=0&&R<0?'You are taking away more than A has, so the answer goes <b>below zero</b>. ':'';
             return numberLine(w.aL,R,L,w.op,w.bL)+
               `<div class="fp-wt-say">${below}Start at <b>${fracText(w.aL,L)}</b>. ${why} Move ${B} piece${B===1?'':'s'} of size 1/${L} and land on <b>${fracText(R,L)}</b>.</div>`;
           }
@@ -8384,15 +8375,6 @@ filter:opacity(0.15)"></div>
           };
           MR.say(msgs[activeOp]||''); MR.m.operate++; MR.fire('operate', { op: activeOp });
         });
-      });
-
-      document.getElementById('fpNegMode').addEventListener('change',function(){
-        negMode=this.checked;
-        if(!negMode){ SA.neg=false; SB.neg=false; }
-        refresh(SA); refresh(SB); clearResult(); updateEquation();
-        MR.say(negMode
-          ? 'Negative numbers are on. Each fraction has a <b>Make negative</b> switch now, and adding or subtracting happens on a number line.'
-          : 'Negative numbers are off — everything is back above zero.');
       });
 
       initBuilder(SA);
