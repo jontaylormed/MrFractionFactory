@@ -1299,18 +1299,35 @@
     .fp-blabel { font-size:13px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
     .fp-clr { font-size:12px; font-weight:700; padding:4px 12px; border-radius:6px; border:1.5px solid var(--dy-border); background:var(--dy-bg2); color:var(--dy-muted); cursor:pointer; font-family:var(--font-body); }
     .fp-clr:hover { background:var(--dy-border); }
-    .fp-ctrl { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-    .fp-ctrl label { font-size:12px; font-weight:700; color:var(--dy-muted); width:110px; flex-shrink:0; letter-spacing:.03em; }
-    .fp-ctrl-val { font-size:16px; font-weight:700; width:52px; min-width:52px; text-align:center; color:var(--dy-text); background:var(--dy-bg2); border:1.5px solid var(--dy-border); border-radius:5px; padding:5px 4px; font-family:var(--font-body); -moz-appearance:textfield; }
+    .fp-ctrl-val { font-size:16px; font-weight:700; width:52px; min-width:52px; text-align:center; color:var(--dy-text); background:#fff; border:1.5px solid var(--dy-border); border-radius:5px; padding:7px 4px; font-family:var(--font-body); -moz-appearance:textfield; }
     .fp-ctrl-val::-webkit-outer-spin-button, .fp-ctrl-val::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
     .fp-ctrl-val:focus { outline:none; border-color:var(--dy-text); }
-    .fp-slider-wrap { flex:1; display:flex; flex-direction:column; justify-content:center; }
-    input[type=range].dy-slider { -webkit-appearance:none; appearance:none; width:100%; height:10px; border-radius:5px; background:var(--dy-bg2); border:1.5px solid var(--dy-border); outline:none; cursor:pointer; }
-    input[type=range].dy-slider::-webkit-slider-thumb { -webkit-appearance:none; width:28px; height:28px; border-radius:50%; background:#fff; border:3px solid var(--dy-border); cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.18); transition:border-color .15s,transform .1s; }
-    input[type=range].dy-slider::-moz-range-thumb { width:28px; height:28px; border-radius:50%; background:#fff; border:3px solid var(--dy-border); cursor:pointer; }
-    input[type=range].dy-slider:hover::-webkit-slider-thumb { border-color:var(--dy-text); transform:scale(1.12); }
-    .fp-numerator-hint { font-size:12px; font-weight:700; color:#5a7a3a; background:#edf7e4; border:1.5px dashed #8ab85a; border-radius:6px; padding:6px 10px; margin-bottom:8px; text-align:center; }
+    /* Steppers replace the old sliders: ▲▼ buttons are reliable on touch and
+       Chromebooks, and the typed box stays for anyone who knows the number. */
+    .fp-step-row { display:flex; align-items:center; justify-content:space-between; gap:8px 12px; margin-bottom:10px; flex-wrap:wrap; }
+    .fp-step-lbl { font-size:13px; font-weight:700; color:var(--dy-text); line-height:1.3; }
+    .fp-step-lbl small { display:block; font-size:11px; font-weight:400; color:var(--dy-hint); }
+    .fp-stepper { display:flex; align-items:center; gap:6px; }
+    .fp-stepper button { width:40px; height:40px; border-radius:8px; border:1.5px solid var(--dy-border); background:var(--dy-bg2); color:var(--dy-text); font-size:14px; cursor:pointer; font-family:var(--font-body); }
+    .fp-stepper button:hover:not(:disabled) { background:var(--dy-border); }
+    .fp-stepper button:disabled, .fp-recut button:disabled { opacity:.35; cursor:not-allowed; }
+    .fp-brow-right { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+    .fp-negsw { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:var(--dy-text); cursor:pointer; }
+    .fp-negsw[hidden] { display:none; }
+    .fp-negsw input, .fp-negmode input { width:20px; height:20px; accent-color:#2c2214; flex-shrink:0; margin:0; }
+    .fp-negmode { display:flex; align-items:flex-start; gap:10px; margin-bottom:14px; padding:10px 14px; background:var(--dy-bg2); border:1.5px solid var(--dy-border); border-radius:8px; cursor:pointer; font-size:14px; font-weight:700; color:var(--dy-text); line-height:1.4; }
+    .fp-negmode input { margin-top:1px; }
+    .fp-negmode small { display:block; font-size:12px; font-weight:400; color:var(--dy-muted); }
+    .fp-recut { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:2px 0 6px; padding:8px 10px; border-radius:8px; background:#edf7f1; border:1.5px dashed #7dbb96; }
+    .fp-recut-lbl { font-size:12px; font-weight:700; color:#3a7a50; flex:1 1 150px; line-height:1.35; }
+    .fp-recut-lbl small { display:block; font-weight:400; color:var(--dy-muted); }
+    .fp-recut button { min-width:40px; height:40px; border-radius:8px; border:1.5px solid #7dbb96; background:#fff; color:#3a7a50; font-size:16px; font-weight:700; cursor:pointer; font-family:var(--font-body); }
+    .fp-recut button:hover:not(:disabled) { background:#d8eee2; }
+    .fp-started { font-size:12px; font-weight:700; color:#3a7a50; display:flex; align-items:center; gap:4px 10px; flex-wrap:wrap; }
+    .fp-linkbtn { font:inherit; font-size:12px; font-weight:700; color:var(--dy-muted); background:none; border:0; padding:6px 0; text-decoration:underline; cursor:pointer; }
     .fp-rects { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+    /* the empty whole that appears once the last one is full */
+    .fp-row-rect.next { border-style:dashed; opacity:.7; }
     .fp-row-rect { display:flex; border:2px solid var(--dy-border); border-radius:5px; overflow:hidden; height:48px; background:var(--dy-bg); }
     .fp-cell { flex:1; cursor:pointer; transition:background .07s; min-width:4px; border-right:1px solid var(--dy-border); }
     .fp-cell:last-child { border-right:none; }
@@ -1319,9 +1336,69 @@
     .fp-frac { display:inline-flex; flex-direction:column; align-items:center; font-size:24px; font-weight:700; line-height:1.2; font-family:var(--font-body); }
     .fp-fline { height:3px; margin:4px 0; min-width:24px; border-radius:2px; }
     .fp-opcol { display:flex; flex-direction:column; align-items:center; justify-content:center; padding-top:42px; gap:7px; }
-    .fp-opbtn { width:46px; height:46px; border-radius:8px; border:2px solid var(--dy-border); background:var(--dy-bg); font-size:22px; font-weight:700; cursor:pointer; color:var(--dy-muted); display:flex; align-items:center; justify-content:center; transition:all .12s; font-family:var(--font-body); }
+    /* Operation buttons wear one neutral ink — never Fraction A's blue or
+       B's red — and say their name, so an operation can't be mistaken for a
+       fraction's sign. */
+    .fp-opbtn { width:66px; height:58px; border-radius:8px; border:2px solid var(--dy-border); background:var(--dy-bg); cursor:pointer; color:#2c2214; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1; transition:background .12s, box-shadow .12s; font-family:var(--font-body); }
+    .fp-opbtn .sym { font-size:24px; font-weight:700; }
+    .fp-opbtn .word { font-size:11px; font-weight:700; letter-spacing:.04em; margin-top:4px; }
     .fp-opbtn:hover { background:var(--dy-bg2); }
-    .fp-opbtn.active { color:#fff; border-color:transparent; }
+    .fp-opbtn.active { background:#2c2214; color:#fff; border-color:#2c2214; box-shadow:0 0 0 3px rgba(201,106,31,.45); }
+    /* the problem, written out: A  (op)  B  = ? */
+    .fp-eq { display:flex; align-items:center; justify-content:center; gap:10px 16px; flex-wrap:wrap; margin-top:1.25rem; padding:12px 16px; background:var(--dy-bg2); border-radius:10px; min-height:84px; }
+    .fp-eq-op { width:44px; height:44px; border-radius:50%; background:#2c2214; color:#fff; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:700; flex-shrink:0; }
+    .fp-eq-eq { font-size:26px; font-weight:700; color:var(--dy-muted); }
+    .fp-eq-q { font-family:var(--font-display); font-size:30px; color:var(--dy-muted); }
+    .fp-fwrap { display:inline-flex; align-items:center; }
+    .fp-negsign { font-size:28px; font-weight:700; margin-right:3px; }
+    .fp-paren { font-size:40px; font-weight:400; color:var(--dy-muted); line-height:1; }
+    .fp-fnum { font-size:26px; font-weight:700; }
+    .fp-fwords { font-size:14px; font-weight:700; color:var(--dy-muted); margin-left:10px; }
+    /* Solve's step-by-step walkthrough */
+    .fp-wt { width:100%; max-width:560px; }
+    .fp-wt-head { display:flex; flex-direction:column; gap:2px; margin-bottom:10px; }
+    .fp-wt-step { font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--dy-muted); }
+    .fp-wt-title { font-family:var(--font-display); font-size:22px; color:var(--dy-text); line-height:1.2; }
+    .fp-wt-say { padding:12px 16px; border-radius:8px; background:#fef3e2; border-left:4px solid #BA7517; font-size:14px; line-height:1.7; margin:12px 0; color:var(--dy-text); }
+    .fp-wt-say.good { background:#edf7f1; border-left-color:#639922; }
+    .fp-wt-say.stop { background:#fdecea; border-left-color:#D85A30; }
+    .fp-wt-nav { display:flex; justify-content:space-between; gap:10px; margin-top:16px; }
+    .fp-wt-btn { min-height:44px; padding:10px 22px; border-radius:8px; border:2px solid var(--dy-border); background:var(--dy-bg); font-size:15px; font-weight:700; color:var(--dy-text); cursor:pointer; font-family:var(--font-body); }
+    .fp-wt-btn.primary { background:#2c2214; border-color:#2c2214; color:#fff; }
+    .fp-wt-btn:disabled { opacity:.35; cursor:not-allowed; }
+    .fp-wrow { margin:10px 0; }
+    .fp-wlbl { font-size:13px; font-weight:700; margin-bottom:4px; }
+    .fp-wlbl span { font-weight:400; color:var(--dy-muted); }
+    .fp-wbars { display:flex; flex-direction:column; gap:5px; }
+    /* every whole is drawn the same width, so different piece sizes show */
+    .fp-wbar { display:flex; width:100%; max-width:420px; height:40px; border:2px solid var(--dy-border); border-radius:5px; overflow:hidden; background:#fdf8f0; }
+    .fp-wbar > div { flex:1 1 0; min-width:0; border-right:1px solid #c8b89a99; }
+    .fp-wbar > div:last-child { border-right:0; }
+    .fp-wbar > .gone { background:repeating-linear-gradient(45deg,#f6d9cc 0 5px,#e9b9a3 5px 10px); }
+    .fp-pieces { display:flex; gap:20px; flex-wrap:wrap; align-items:flex-end; margin:8px 0; }
+    .fp-piece { height:30px; border-radius:4px; border:2px solid rgba(0,0,0,.15); }
+    .fp-piece-lbl { font-size:12px; font-weight:700; color:var(--dy-muted); margin-top:4px; }
+    .fp-pick { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:10px 0; }
+    .fp-pick button { min-width:80px; min-height:48px; padding:6px 14px; border-radius:8px; border:2px solid var(--dy-border); background:#fff; font-size:18px; font-weight:700; color:var(--dy-text); cursor:pointer; font-family:var(--font-body); }
+    .fp-pick button.right { background:#edf7f1; border-color:#639922; }
+    .fp-pick button.okish { background:#fef3e2; border-color:#BA7517; }
+    .fp-pick button.wrong { background:#fdecea; border-color:#D85A30; text-decoration:line-through; }
+    .fp-chain { font-size:18px; font-weight:700; color:var(--dy-text); text-align:center; margin:12px 0 4px; line-height:1.8; }
+    .fp-answer { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; margin-top:8px; }
+    .fp-answer-note { text-align:center; font-size:14px; color:var(--dy-muted); margin-top:6px; }
+    /* number line for + and − when negatives are involved (Below Zero styling) */
+    .fp-nl { position:relative; height:118px; margin:14px 14px 4px; }
+    .fp-nl-axis { position:absolute; left:0; right:0; top:56px; height:3px; background:var(--brown-mid); border-radius:2px; }
+    .fp-nl-tick { position:absolute; top:50px; height:15px; width:1.5px; background:var(--border); margin-left:-.75px; }
+    .fp-nl-tick.whole { top:44px; height:27px; width:2.5px; background:var(--brown-muted); margin-left:-1.25px; }
+    .fp-nl-tick.zero { top:38px; height:39px; width:3px; background:var(--brown-dark); margin-left:-1.5px; }
+    .fp-nl-num { position:absolute; top:74px; transform:translateX(-50%); font-size:12px; font-weight:700; color:var(--brown-muted); }
+    .fp-nl-dot { position:absolute; top:48px; width:19px; height:19px; margin-left:-9.5px; border-radius:50%; border:2.5px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.3); }
+    .fp-nl-arrow { position:absolute; top:28px; height:3px; border-radius:2px; }
+    .fp-nl-arrow::after { content:''; position:absolute; top:-6px; border:7.5px solid transparent; }
+    .fp-nl-arrow.right::after { right:-10px; border-left:10px solid currentColor; border-right:0; }
+    .fp-nl-arrow.left::after { left:-10px; border-right:10px solid currentColor; border-left:0; }
+    .fp-nl-lbl { position:absolute; transform:translateX(-50%); font-size:13px; font-weight:700; white-space:nowrap; }
     .fp-solverow { display:flex; justify-content:center; margin-top:1.5rem; }
     .fp-solvebtn { padding:11px 40px; border-radius:8px; border:2px solid var(--dy-border); background:var(--dy-bg); font-size:16px; font-weight:700; cursor:pointer; color:var(--dy-text); font-family:var(--font-body); letter-spacing:.04em; transition:background .1s; }
     .fp-solvebtn:hover { background:var(--dy-bg2); }
@@ -1351,10 +1428,6 @@
     .fp-frac-type.whole    { background:#eef4fd; color:#2a5fa0; border-color:#7aaee0; }
     .fp-frac-type.zero     { background:#f5f0eb; color:#9a8470; border-color:#c8b89a; }
     .fp-frac-type-def { font-size:11px; font-weight:400; opacity:.85; }
-    .fp-sign-toggle { display:flex; border:1.5px solid var(--dy-border); border-radius:6px; overflow:hidden; }
-    .fp-sign-btn { flex:1; padding:4px 10px; font-size:15px; font-weight:700; cursor:pointer; border:none; background:var(--dy-bg2); color:var(--dy-muted); font-family:var(--font-body); transition:background .1s,color .1s; }
-    .fp-sign-btn.active-pos { background:#378ADD; color:#fff; }
-    .fp-sign-btn.active-neg { background:#D85A30; color:#fff; }
 
     /* ============================================================
        PHASE 4 — CONVERT PAGE (transplanted from fraction-converter.html)
@@ -3239,18 +3312,17 @@
     .btn.bz-again { padding:9px 18px; font-size:13.5px; }
 
     /* ============================================================
-       MOBILE — Station 03 had no responsive rules at all, so the
-       fixed 110px label plus the value box left the slider ~3px wide
-       on a small phone. Below 700px the label sits above the slider.
+       MOBILE — Station 03. The builders stack, and the operation
+       buttons become one row between them.
        ============================================================ */
     @media (max-width: 700px) {
-      .fp-ctrl { flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-      .fp-ctrl label { width: 100%; margin-bottom: 0; }
-      .fp-slider-wrap { flex: 1 1 120px; min-width: 110px; }
       .fp-builder { min-width: 0; padding: 12px; }
       .fp-row { gap: 12px; }
-      .fp-opcol { padding-top: 0; flex-direction: row; width: 100%; justify-content: center; }
+      .fp-opcol { padding-top: 0; flex-direction: row; width: 100%; justify-content: center; flex-wrap: wrap; }
       .fp-row-rect { height: 40px; }
+      .fp-eq { gap: 8px 12px; padding: 10px; }
+      .fp-fwords { margin-left: 6px; font-size: 13px; }
+      .fp-nl { margin: 14px 10px 4px; }
     }
 
     /* Roomier page gutters cost real width on a phone. */
@@ -3264,6 +3336,7 @@
     @media (pointer: coarse) {
       .nd-step, .rbm-chip, .pz-reset, .bz-sign button,
       .cm-conv, .track-switch, .rbm-speed-btns button { min-height: 40px; }
+      .fp-stepper button, .fp-recut button, .fp-clr, .fp-linkbtn { min-height: 44px; min-width: 44px; }
       .fp-ctrl-val, .cv-number-input, .ff-num-input, .simp-input { min-height: 40px; }
       .fp-cell { min-width: 9px; }
       .ff-bd-cell { min-width: 30px; }
@@ -3807,7 +3880,7 @@ filter:opacity(0.15)"></div>
         <div class="station-meta">
           <div class="station-label">Station 03 — Operations</div>
           <div class="station-title">Fraction Operations</div>
-          <div class="station-desc">Build fractions with sliders, pick an operation, and see the result visually.</div>
+          <div class="station-desc">Build two fractions by shading pieces, pick an operation, and watch it worked out step by step.</div>
         </div>
       </div>
       <button class="back-btn" onclick="showPage('home')">← Back</button>
@@ -3815,16 +3888,21 @@ filter:opacity(0.15)"></div>
     <div class="content-area">
       <div class="card">
         <div class="fp">
+          <label class="fp-negmode">
+            <input type="checkbox" id="fpNegMode">
+            <span>Use negative numbers<small>Adds a “Make negative” switch to each fraction. Adding and subtracting are then shown on a number line.</small></span>
+          </label>
           <div class="fp-row">
             <div class="fp-builder" id="bA"></div>
-            <div class="fp-opcol">
-              <button class="fp-opbtn active" id="op+" style="background:#378ADD;color:#fff;border-color:transparent;">+</button>
-              <button class="fp-opbtn" id="op-">−</button>
-              <button class="fp-opbtn" id="op×">×</button>
-              <button class="fp-opbtn" id="op÷">÷</button>
+            <div class="fp-opcol" role="group" aria-label="Operation">
+              <button type="button" class="fp-opbtn active" data-op="+" aria-pressed="true"><span class="sym">+</span><span class="word">add</span></button>
+              <button type="button" class="fp-opbtn" data-op="-" aria-pressed="false"><span class="sym">−</span><span class="word">subtract</span></button>
+              <button type="button" class="fp-opbtn" data-op="×" aria-pressed="false"><span class="sym">×</span><span class="word">multiply</span></button>
+              <button type="button" class="fp-opbtn" data-op="÷" aria-pressed="false"><span class="sym">÷</span><span class="word">divide</span></button>
             </div>
             <div class="fp-builder" id="bB"></div>
           </div>
+          <div class="fp-eq" id="fpEq" aria-live="polite"></div>
           <div id="denomGuide"></div>
           <div class="fp-solverow">
             <button class="fp-solvebtn" id="solveBtn">Solve ⚙️</button>
@@ -4551,11 +4629,11 @@ filter:opacity(0.15)"></div>
             return '<b>' + st.fn + '/' + st.fd + '</b> ÷ ' + st.p + ' → <b>' + st.tn + '/' + st.td + '</b>';
           }).join(', then ');
           if (w.steps.length > 1){
-            html += 'You worked out <b>' + w.n + '/' + w.d + '</b>, but the screen shows <b>' + w.sn + '/' + w.sd +
+            html += 'You worked out <b>' + w.n + '/' + w.d + '</b>, and its simplest form is <b>' + w.sn + '/' + w.sd +
                     '</b>. Here is the route: ' + route + '. ' +
                     'Or in one go — both divide by <b>' + w.g + '</b>.';
           } else {
-            html += 'You worked out <b>' + w.n + '/' + w.d + '</b>, but the screen shows <b>' + w.sn + '/' + w.sd +
+            html += 'You worked out <b>' + w.n + '/' + w.d + '</b>, and its simplest form is <b>' + w.sn + '/' + w.sd +
                     '</b>. Top and bottom both divide by <b>' + w.g + '</b>: ' + route + '. Same amount, fewer pieces.';
           }
           if (this.level() === 'arriving' || this.level() === 'noticing')
@@ -5578,7 +5656,10 @@ filter:opacity(0.15)"></div>
       for (let i = 0; i < PZ_SLICES; i++){
         const g = document.getElementById('pz-s' + i);
         if (!g) continue;
-        g.className = 'pz-slice';            // clears eaten AND leaving
+        // setAttribute, not className: on an SVG <g>, className is a read-only
+        // SVGAnimatedString and assigning to it is silently ignored, which left
+        // eaten slices invisible while the counter reset to 0.
+        g.setAttribute('class', 'pz-slice'); // clears eaten AND leaving
         void g.offsetWidth;                  // reflow, so the animation can retrigger
         if (back){
           g.style.animationDelay = (i * 45) + 'ms';
@@ -7791,256 +7872,383 @@ filter:opacity(0.15)"></div>
       if(el) el.addEventListener('keydown',e=>{ if(e.key==='Enter') simpRun(); });
     });
 
-    /* ---- OPERATIONS ENGINE (transplanted from fraction_tool_v16.html) ---- */
+    /* ---- OPERATIONS ENGINE ----
+       Rebuilt after classroom feedback (teachers and students found the
+       first version hard to read). What changed, and why:
+       - No sliders and no "Whole Numbers" control. Students pick the piece
+         size (▲▼) and shade pieces; a new empty whole appears on its own once
+         the last one is full. The old control only set how many empty bars
+         were drawn, and everyone read it as the whole part of a mixed number.
+       - "Re-cut" is the one control that keeps the amount and changes the
+         piece size — the equivalent-fraction move, made explicit, with the
+         starting fraction kept on screen.
+       - Solve always works. For + and − it walks through compare → re-cut →
+         combine → answer instead of disabling itself.
+       - Negatives are opt-in and drawn on a number line: a bar cannot show a
+         negative amount, and the old bars silently used absolute values.
+       - Operation buttons are neutral ink with their names; the fraction
+         colours (A blue, B red) are never used for an operation. */
     (function(){
       const CA='#378ADD', CB='#D85A30', CR='#639922', CO='#BA7517';
-      const OP_COLORS={'+':CA,'-':CB,'×':CO,'÷':'#9F77DD'};
       const GROUP_PAL=[CB,'#9F3A6A',CR,CO,'#533AB7','#1D9E75'];
       const BG='#fdf8f0';
+      const MAX_D=24, MAX_RECUT_D=48, MAX_WHOLES=6;
+      const MINUS='−';
+      const OP_SYM={'+':'+','-':MINUS,'×':'×','÷':'÷'};
+      const OP_WORD={'+':'add','-':'subtract','×':'multiply','÷':'divide'};
 
       function gcd(a,b){return b===0?a:gcd(b,a%b);}
       function lcm(a,b){return(a*b)/gcd(a,b);}
       function simplify(n,d){if(n===0)return[0,1];const g=gcd(Math.abs(n),Math.abs(d));return[n/g,d/g];}
 
-      const SA={rects:1,cuts:4,selectedCount:0,sign:1};
-      const SB={rects:1,cuts:3,selectedCount:0,sign:1};
-      let activeOp='+';
-      let denomMismatchSeen=false;
+      // n = pieces shaded (never negative), d = pieces in each whole; the sign lives in neg.
+      const SA={id:'bA',label:'Fraction A',color:CA,d:4,n:1,neg:false,start:null};
+      const SB={id:'bB',label:'Fraction B',color:CB,d:3,n:1,neg:false,start:null};
+      let activeOp='+', negMode=false, wt=null;
+      let guideTimer=null, mismatchSeen=false;
+      const pairsSaid=new Set();
 
-      function totalCells(s){return s.rects*s.cuts;}
-      function ppr(s){return s.cuts;}
-      function getFrac(s){
-        const den=ppr(s),num=s.selectedCount*(s.sign||1);
-        const[sn,sd]=simplify(num,den);
-        return{n:sn,d:sd,rawN:num,ppr:den,rects:s.rects,totalCells:totalCells(s),sign:s.sign||1};
+      const signed=s=>(s.neg?-1:1)*s.n;
+      const maxN=s=>s.d*MAX_WHOLES;
+      const resultArea=()=>document.getElementById('resultArea');
+
+      /* ---------- writing fractions ---------- */
+      // Plain text: −3/5, or a whole number when d is 1.
+      function fracText(n,d){ return (n<0?MINUS:'')+Math.abs(n)+(d===1?'':'/'+d); }
+
+      // "(that's 1 and 3/4)", "(that's 2 wholes)", "(same amount as 1/2)".
+      // Replaces the old grey "=" between improper and mixed forms, which read as a minus.
+      function wordsFor(n,d,skipSame){
+        const a=Math.abs(n), sg=n<0?MINUS:'';
+        if(a===0) return '';
+        if(a%d===0){ const w=a/d; return `(that's ${sg}${w} whole${w===1?'':'s'})`; }
+        if(a>d){ const[rn,rd]=simplify(a%d,d); return `(that's ${sg}${Math.floor(a/d)} and ${rn}/${rd})`; }
+        const[sn,sd]=simplify(a,d);
+        return (!skipSame&&sd!==d)?`(same amount as ${sg}${sn}/${sd})`:'';
       }
 
-      function updateSliderFill(el,color){
-        const min=parseInt(el.min)||0,max=parseInt(el.max)||1,val=parseInt(el.value)||0;
-        const pct=((val-min)/(max-min))*100;
-        el.style.background=`linear-gradient(to right,${color} ${pct}%,#f5ede0 ${pct}%)`;
-      }
-
-      function negPrefix(rawN,color){
-        return rawN<0?`<span style="font-size:28px;font-weight:700;color:${color};margin-right:2px;">−</span>`:'';
-      }
-
-      function renderFracHTML(rawN,p,color){
-        const absN=Math.abs(rawN);
-        const pfx=negPrefix(rawN,color);
-        if(absN===0)return`<span style="font-size:24px;font-weight:700;color:#9a8470;">0</span>`;
-        if(absN%p===0)return`<div style="display:inline-flex;align-items:center;">${pfx}<span style="font-size:28px;font-weight:700;color:${color};">${absN/p}</span></div>`;
-        const[fn,fd]=simplify(absN,p);
-        const lwI=Math.max(28,Math.max(String(fn).length,String(fd).length)*14);
-        if(fn<fd){
-          return`<div style="display:inline-flex;align-items:center;">${pfx}<span class="fp-frac" style="color:${color};"><span>${fn}</span><span class="fp-fline" style="width:${lwI}px;background:${color};"></span><span>${fd}</span></span></div>`;
+      // A fraction exactly as it was built (n/d, not simplified), with its sign attached.
+      function fracHTML(n,d,color,opts){
+        opts=opts||{};
+        const a=Math.abs(n);
+        const lw=Math.max(26,Math.max(String(a).length,String(d).length)*14);
+        let h=a===0||d===1
+          ? `<span class="fp-fnum" style="color:${color};">${a}</span>`
+          : `<span class="fp-frac" style="color:${color};"><span>${a}</span><span class="fp-fline" style="width:${lw}px;background:${color};"></span><span>${d}</span></span>`;
+        if(n<0){
+          h=`<span class="fp-negsign" style="color:${color};">${MINUS}</span>`+h;
+          if(opts.paren) h=`<span class="fp-paren">(</span>${h}<span class="fp-paren">)</span>`;
         }
-        const whole=Math.floor(fn/fd),remN=fn%fd;
-        const lwM=Math.max(28,Math.max(String(remN).length,String(fd).length)*14);
-        const improper=`<span class="fp-frac" style="color:${color};font-size:22px;"><span>${fn}</span><span class="fp-fline" style="width:${lwI}px;background:${color};"></span><span>${fd}</span></span>`;
-        const mixed=`<div style="display:inline-flex;align-items:center;gap:4px;"><span style="font-size:26px;font-weight:700;color:${color};">${whole}</span><span class="fp-frac" style="color:${color};font-size:18px;"><span>${remN}</span><span class="fp-fline" style="width:${lwM}px;background:${color};"></span><span>${fd}</span></span></div>`;
-        return`<div style="display:inline-flex;align-items:center;gap:10px;">${pfx}${improper}<span style="font-size:14px;color:#9a8470;">=</span>${pfx}${mixed}</div>`;
+        h=`<span class="fp-fwrap">${h}</span>`;
+        if(opts.words){ const w=wordsFor(n,d,opts.skipSame); if(w) h+=`<span class="fp-fwords">${w}</span>`; }
+        return h;
       }
 
-      function fracTypeHTML(rawN,p){
-        if(rawN===0)return`<span class="fp-frac-type zero">0 <span class="fp-frac-type-def">— zero</span></span>`;
-        if(rawN%p===0)return`<span class="fp-frac-type whole">Whole Number <span class="fp-frac-type-def">— numerator ÷ denominator = ${rawN/p}</span></span>`;
-        if(rawN<p)return`<span class="fp-frac-type proper">Proper <span class="fp-frac-type-def">— numerator &lt; denominator</span></span>`;
+      function fracTypeHTML(n,d){
+        const a=Math.abs(n);
+        if(a===0)return`<span class="fp-frac-type zero">0 <span class="fp-frac-type-def">— zero</span></span>`;
+        if(a%d===0)return`<span class="fp-frac-type whole">Whole Number <span class="fp-frac-type-def">— numerator ÷ denominator = ${a/d}</span></span>`;
+        if(a<d)return`<span class="fp-frac-type proper">Proper <span class="fp-frac-type-def">— numerator &lt; denominator</span></span>`;
         return`<span class="fp-frac-type improper">Improper <span class="fp-frac-type-def">— numerator &gt; denominator</span></span>`;
       }
 
-      function drawCells(s,color){
-        const p=ppr(s);let html='',idx=0;
-        for(let r=0;r<s.rects;r++){
+      /* ---------- the two builders ---------- */
+      function wholesShown(s){
+        let w=Math.max(1,Math.ceil(s.n/s.d));
+        if(s.n>0&&s.n%s.d===0&&w<MAX_WHOLES) w++;   // a fresh empty whole once the last one is full
+        return w;
+      }
+
+      function drawCells(s){
+        const w=wholesShown(s); let html='',idx=0;
+        for(let r=0;r<w;r++){
+          const next=r>0&&r*s.d>=s.n;
           let row='';
-          for(let c=0;c<p;c++){
-            row+=`<div class="fp-cell" data-idx="${idx}" style="background:${idx<s.selectedCount?color:BG};"></div>`;
+          for(let c=0;c<s.d;c++){
+            row+=`<div class="fp-cell" data-idx="${idx}" style="background:${idx<s.n?s.color:BG};"></div>`;
             idx++;
           }
-          html+=`<div class="fp-row-rect">${row}</div>`;
+          html+=`<div class="fp-row-rect${next?' next':''}"${next?' title="Shade here to go past one whole"':''}>${row}</div>`;
         }
         return html;
       }
 
-      function refreshDisplay(id,s,color){
-        const el=document.getElementById(id);
-        if(!el) return;
-        el.querySelector('.fp-rects').innerHTML=drawCells(s,color);
-        el.querySelector('.fp-fracval').innerHTML=renderFracHTML(s.selectedCount,ppr(s),color)+fracTypeHTML(s.selectedCount,ppr(s));
-        const hint=el.querySelector('.fp-hint');
-        if(hint)hint.textContent=ppr(s)>16?`Denominator ${ppr(s)} — cells are very small`:'';
-        const rSlider=document.getElementById(`${id}R`);
-        const cSlider=document.getElementById(`${id}C`);
-        if(rSlider){rSlider.value=s.rects;updateSliderFill(rSlider,'#888780');}
-        if(cSlider){cSlider.value=s.cuts;updateSliderFill(cSlider,color);}
-        const rBox=document.getElementById(`${id}Ro`); if(rBox)rBox.value=s.rects;
-        const cBox=document.getElementById(`${id}Co`); if(cBox)cBox.value=s.cuts;
-        const total=totalCells(s);
-        const nSlider=document.getElementById(`${id}N`);
-        if(nSlider){nSlider.max=total;nSlider.value=s.selectedCount;updateSliderFill(nSlider,color);}
-        const nBox=document.getElementById(`${id}No`);
-        if(nBox){nBox.max=total;nBox.value=s.selectedCount;}
-        el.querySelector('.fp-rects').querySelectorAll('.fp-cell').forEach(cell=>{
-          cell.addEventListener('click',function(){
-            const idx=parseInt(this.dataset.idx);
-            s.selectedCount=idx<s.selectedCount?idx:idx+1;
-            refreshDisplay(id,s,color);
-          });
-        });
-        updateGuide();
+      function stepperHTML(s,key,label,sub){
+        return `<div class="fp-step-row">
+            <div class="fp-step-lbl">${label}<small>${sub}</small></div>
+            <div class="fp-stepper">
+              <button type="button" data-k="${key}" data-dir="-1" aria-label="${s.label}: ${label}, one fewer">▼</button>
+              <input type="number" class="fp-ctrl-val" id="${s.id}${key}" inputmode="numeric" pattern="[0-9]*" aria-label="${s.label}: ${label}">
+              <button type="button" data-k="${key}" data-dir="1" aria-label="${s.label}: ${label}, one more">▲</button>
+            </div>
+          </div>`;
       }
 
-      function initBuilder(id,s,color,label){
-        document.getElementById(id).innerHTML=`
+      function initBuilder(s){
+        const el=document.getElementById(s.id);
+        el.innerHTML=`
           <div class="fp-blabel-row">
-            <div class="fp-blabel" style="color:${color};">${label}</div>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div class="fp-sign-toggle"><button class="fp-sign-btn active-pos" id="${id}SignPos">+</button><button class="fp-sign-btn" id="${id}SignNeg">−</button></div>
-              <button class="fp-clr" id="${id}Clr">Clear</button>
+            <div class="fp-blabel" style="color:${s.color};">${s.label}</div>
+            <div class="fp-brow-right">
+              <label class="fp-negsw" hidden><input type="checkbox" id="${s.id}Neg"> Make negative</label>
+              <button type="button" class="fp-clr" id="${s.id}Clr">Clear</button>
             </div>
           </div>
-          <div class="fp-ctrl">
-            <label>Whole Numbers</label>
-            <div class="fp-slider-wrap"><input type="range" class="dy-slider" id="${id}R" min="1" max="10" step="1" value="${s.rects}"></div>
-            <input type="number" class="fp-ctrl-val" id="${id}Ro" inputmode="numeric" pattern="[0-9]*" min="1" max="10" step="1" value="${s.rects}" aria-label="${label} whole numbers">
-          </div>
-          <div class="fp-ctrl">
-            <label>Denominator</label>
-            <div class="fp-slider-wrap"><input type="range" class="dy-slider" id="${id}C" min="1" max="32" step="1" value="${s.cuts}"></div>
-            <input type="number" class="fp-ctrl-val" id="${id}Co" inputmode="numeric" pattern="[0-9]*" min="1" max="32" step="1" value="${s.cuts}" aria-label="${label} denominator">
-          </div>
-          <div class="fp-ctrl">
-            <label>Numerator</label>
-            <div class="fp-slider-wrap"><input type="range" class="dy-slider" id="${id}N" min="0" max="${totalCells(s)}" step="1" value="${s.selectedCount}"></div>
-            <input type="number" class="fp-ctrl-val" id="${id}No" inputmode="numeric" pattern="[0-9]*" min="0" max="${totalCells(s)}" step="1" value="${s.selectedCount}" aria-label="${label} numerator">
-          </div>
-          <div class="fp-numerator-hint">👆 Tap cells below, or type the numerator above</div>
+          ${stepperHTML(s,'d','Pieces in each whole','makes a different fraction')}
+          ${stepperHTML(s,'n','Pieces shaded','or tap the bars below')}
           <div class="fp-rects"></div>
-          <div class="fp-fracval"></div>
-          <div class="fp-hint"></div>
-        `;
-        refreshDisplay(id,s,color);
-        document.getElementById(`${id}R`).addEventListener('input',function(){
-          s.rects=parseInt(this.value)||1;document.getElementById(`${id}Ro`).value=s.rects;
-          s.selectedCount=Math.min(s.selectedCount,totalCells(s));
-          updateSliderFill(this,'#888780');refreshDisplay(id,s,color);
+          <div class="fp-recut">
+            <div class="fp-recut-lbl">Re-cut: cut every piece into<small>same amount, smaller pieces — an equivalent fraction</small></div>
+            ${[2,3,4,5].map(k=>`<button type="button" data-cut="${k}" aria-label="Re-cut ${s.label}: cut every piece into ${k}">${k}</button>`).join('')}
+          </div>
+          <div class="fp-started"></div>
+          <div class="fp-fracval"></div>`;
+        el.addEventListener('click',function(e){
+          const t=e.target.closest('button,.fp-cell');
+          if(!t||!el.contains(t)) return;
+          if(t.classList.contains('fp-cell')){ const i=+t.dataset.idx; setN(s,i<s.n?i:i+1); return; }
+          if(t.dataset.k){ const dir=+t.dataset.dir; if(t.dataset.k==='d') setD(s,s.d+dir); else setN(s,s.n+dir); return; }
+          if(t.dataset.cut){ recut(s,+t.dataset.cut); return; }
+          if(t.dataset.undo&&s.start){ s.n=s.start.n; s.d=s.start.d; s.start=null; changed(s); return; }
+          if(t.id===s.id+'Clr'){ s.n=0; s.start=null; changed(s); }
         });
-        document.getElementById(`${id}C`).addEventListener('input',function(){
-          s.cuts=parseInt(this.value)||1;document.getElementById(`${id}Co`).value=s.cuts;
-          s.selectedCount=Math.min(s.selectedCount,totalCells(s));
-          updateSliderFill(this,color);refreshDisplay(id,s,color);
-        });
-        // typing in a box drives the slider, so both routes stay in step
-        document.getElementById(`${id}Ro`).addEventListener('input',function(){
-          const v=Math.min(Math.max(parseInt(this.value)||1,1),10);
-          s.rects=v; document.getElementById(`${id}R`).value=v;
-          s.selectedCount=Math.min(s.selectedCount,totalCells(s));
-          refreshDisplay(id,s,color);
-        });
-        document.getElementById(`${id}Co`).addEventListener('input',function(){
-          const v=Math.min(Math.max(parseInt(this.value)||1,1),32);
-          s.cuts=v; document.getElementById(`${id}C`).value=v;
-          s.selectedCount=Math.min(s.selectedCount,totalCells(s));
-          refreshDisplay(id,s,color);
-        });
-        const setNum=function(raw){
-          const v=Math.min(Math.max(parseInt(raw)||0,0),totalCells(s));
-          s.selectedCount=v; refreshDisplay(id,s,color);
-        };
-        document.getElementById(`${id}N`).addEventListener('input',function(){ setNum(this.value); });
-        document.getElementById(`${id}No`).addEventListener('input',function(){ setNum(this.value); });
-
-        document.getElementById(`${id}Clr`).addEventListener('click',function(){
-          s.selectedCount=0;refreshDisplay(id,s,color);
-          document.getElementById('resultArea').innerHTML='';
-        });
-        document.getElementById(`${id}SignPos`).addEventListener('click',function(){
-          s.sign=1;
-          document.getElementById(`${id}SignPos`).className='fp-sign-btn active-pos';
-          document.getElementById(`${id}SignNeg`).className='fp-sign-btn';
-          refreshDisplay(id,s,color);document.getElementById('resultArea').innerHTML='';
-        });
-        document.getElementById(`${id}SignNeg`).addEventListener('click',function(){
-          s.sign=-1;
-          document.getElementById(`${id}SignPos`).className='fp-sign-btn';
-          document.getElementById(`${id}SignNeg`).className='fp-sign-btn active-neg';
-          refreshDisplay(id,s,color);document.getElementById('resultArea').innerHTML='';
-        });
+        // 'change', not 'input': typing "12" must not pass through 1 on the way
+        document.getElementById(s.id+'d').addEventListener('change',function(){ setD(s,parseInt(this.value)||1); });
+        document.getElementById(s.id+'n').addEventListener('change',function(){ setN(s,parseInt(this.value)||0); });
+        document.getElementById(s.id+'Neg').addEventListener('change',function(){ s.neg=this.checked; changed(s); });
+        refresh(s);
       }
 
-      function updateGuide(){
-        const fA=getFrac(SA),fB=getFrac(SB);
-        const guide=document.getElementById('denomGuide');
-        const solveBtn=document.getElementById('solveBtn');
-        if(!guide||!solveBtn) return;
-        if(activeOp!=='+'&&activeOp!=='-'){guide.innerHTML='';solveBtn.disabled=false;return;}
-        if(fA.ppr===fB.ppr){
-          guide.innerHTML=denomMismatchSeen?`<div class="fp-match">Both fractions have a denominator of <strong>${fA.ppr}</strong> — denominators match. Ready to solve.</div>`:'';
-          solveBtn.disabled=false;
-        } else {
-          denomMismatchSeen=true;
-          const g=gcd(fA.ppr,fB.ppr),l=lcm(fA.ppr,fB.ppr);
-          guide.innerHTML=`
-            <div class="fp-denom-status">Fraction A has denominator <strong>${fA.ppr}</strong>. Fraction B has denominator <strong>${fB.ppr}</strong>.<br>They need to match before you can add or subtract.</div>
-            <div class="fp-guide-step">GCF of ${fA.ppr} and ${fB.ppr} = <strong>${g}</strong> &nbsp;&nbsp; LCD = <strong>${l}</strong><br>Try setting both fractions to a denominator of <strong>${l}</strong>.<br>Can you find other numbers that work too?</div>`;
-          solveBtn.disabled=true;
-          // Update Mr. Fraction dialogue
-          const speech=document.getElementById('mr-speech');
-          MR.say(`Denominators don't match. Both need the same bottom number \u2014 the LCD of ${fA.ppr} and ${fB.ppr} is <b>${l}</b>. Why that one and not just ${fA.ppr}\u00d7${fB.ppr}?`);
+      // ▲▼ on the piece size builds a DIFFERENT fraction (the count stays).
+      function setD(s,v){ s.d=Math.min(Math.max(v,1),MAX_RECUT_D); s.n=Math.min(s.n,maxN(s)); s.start=null; changed(s); }
+      function setN(s,v){ s.n=Math.min(Math.max(v,0),maxN(s)); s.start=null; changed(s); }
+      // Re-cut keeps the AMOUNT: every piece split into k, so n and d both grow.
+      function recut(s,k){
+        if(s.n===0||s.d*k>MAX_RECUT_D) return;
+        if(!s.start) s.start={n:s.n,d:s.d};
+        s.n*=k; s.d*=k; changed(s);
+        MR.say(`Every piece cut into ${k}: <b>${fracText(signed(s)/k,s.d/k)} = ${fracText(signed(s),s.d)}</b>. More pieces, each ${k} times smaller — the same amount.`);
+      }
+
+      function refresh(s){
+        const el=document.getElementById(s.id);
+        el.querySelector('.fp-rects').innerHTML=drawCells(s);
+        document.getElementById(s.id+'d').value=s.d;
+        document.getElementById(s.id+'n').value=s.n;
+        const dis=(k,dir,off)=>{ const b=el.querySelector(`[data-k="${k}"][data-dir="${dir}"]`); if(b) b.disabled=off; };
+        dis('d',-1,s.d<=1); dis('d',1,s.d>=MAX_D);
+        dis('n',-1,s.n<=0); dis('n',1,s.n>=maxN(s));
+        el.querySelectorAll('[data-cut]').forEach(b=>{ b.disabled=s.n===0||s.d*(+b.dataset.cut)>MAX_RECUT_D; });
+        el.querySelector('.fp-started').innerHTML=s.start
+          ? `<span>Started as ${fracText((s.neg?-1:1)*s.start.n,s.start.d)} — same amount, in pieces ${s.d/s.start.d} times smaller</span><button type="button" class="fp-linkbtn" data-undo="1">↺ Undo re-cut</button>`
+          : '';
+        el.querySelector('.fp-fracval').innerHTML=fracHTML(signed(s),s.d,s.color,{words:true})+'<br>'+fracTypeHTML(s.n,s.d);
+        el.querySelector('.fp-negsw').hidden=!negMode;
+        document.getElementById(s.id+'Neg').checked=s.neg;
+      }
+
+      function changed(s){ refresh(s); clearResult(); updateEquation(); scheduleGuide(); }
+      function clearResult(){ wt=null; const r=resultArea(); if(r) r.innerHTML=''; }
+
+      function updateEquation(){
+        const eq=document.getElementById('fpEq'); if(!eq) return;
+        eq.innerHTML=fracHTML(signed(SA),SA.d,CA)+
+          `<span class="fp-eq-op" role="img" aria-label="${OP_WORD[activeOp]}">${OP_SYM[activeOp]}</span>`+
+          fracHTML(signed(SB),SB.d,CB,{paren:true})+
+          `<span class="fp-eq-eq">=</span><span class="fp-eq-q">?</span>`;
+      }
+
+      /* ---------- the note under the problem, and Mr. Fraction ----------
+         The LCD itself is NOT named here: the walkthrough asks for it first.
+         MR.say waits until the steppers settle, and speaks once per new pair
+         — it used to fire on every slider tick, which read as automated. */
+      function scheduleGuide(){ updateGuide(false); clearTimeout(guideTimer); guideTimer=setTimeout(()=>updateGuide(true),900); }
+
+      function updateGuide(speak){
+        const guide=document.getElementById('denomGuide'); if(!guide) return;
+        const addSub=activeOp==='+'||activeOp==='-';
+        if(!addSub){ guide.innerHTML=''; return; }
+        if(SA.d===SB.d){
+          guide.innerHTML=mismatchSeen?`<div class="fp-match">Both are cut into pieces of size <strong>1/${SA.d}</strong> — same-size pieces, so they can be counted together. Ready to solve.</div>`:'';
+          return;
+        }
+        mismatchSeen=true;
+        guide.innerHTML=`<div class="fp-denom-status">Different-size pieces: A is in pieces of <strong>1/${SA.d}</strong>, B is in pieces of <strong>1/${SB.d}</strong>. To ${OP_WORD[activeOp]} them, both need the same size piece.<br><strong>Press Solve</strong> and Mr. Fraction will walk you through it — or match them yourself with <strong>Re-cut</strong>.</div>`;
+        const key=Math.min(SA.d,SB.d)+','+Math.max(SA.d,SB.d);
+        if(speak&&!pairsSaid.has(key)){
+          pairsSaid.add(key);
+          MR.say(`Pieces of 1/${SA.d} and 1/${SB.d} are different sizes, so they can't be counted together yet. Press <b>Solve</b> and we'll find a size both can be cut into.`);
         }
       }
 
-      function makeResultRects(totalSlots,p,colorFn,maxWidth){
-        const numRows=Math.ceil(totalSlots/p);
-        const cw=Math.max(5,Math.min(26,Math.floor(maxWidth/p)));
-        const rowW=cw*p;
-        let html=`<div class="res-rects" style="width:${rowW}px;">`;
-        for(let r=0;r<numRows;r++){
-          let cells='';
-          for(let c=0;c<p;c++){
-            const idx=r*p+c;
-            cells+=`<div style="flex:0 0 ${cw}px;width:${cw}px;height:100%;background:${colorFn(idx)};${c<p-1?'border-right:1px solid #c8b89a55;':''}"></div>`;
+      // Branches on whether the denominators share a factor — it used to ask
+      // "why not 4×3?" even when the LCD WAS 4×3.
+      function lcdLine(a,b){
+        const g=gcd(a,b), l=lcm(a,b);
+        if(g===1) return `${a} and ${b} share no factor except 1, so the smallest size both can be cut into is just ${a}×${b} = <b>${l}</b>.`;
+        return `The LCD of ${a} and ${b} is <b>${l}</b> — smaller than ${a}×${b} = ${a*b}, because ${a} and ${b} share a factor of ${g}. Why does a smaller mould still work?`;
+      }
+
+      /* ---------- drawing for the walkthrough ---------- */
+      // Each whole is drawn the same width, so pieces of different sizes look different.
+      function bars(d,rows,colorAt){
+        let h='<div class="fp-wbars">';
+        for(let r=0;r<rows;r++){
+          let c='';
+          for(let k=0;k<d;k++){
+            const v=colorAt(r*d+k);
+            c+=v==='gone'?'<div class="gone"></div>':`<div${v?` style="background:${v};"`:''}></div>`;
           }
-          html+=`<div class="res-rect-row" style="width:${rowW}px;">${cells}</div>`;
+          h+=`<div class="fp-wbar">${c}</div>`;
         }
-        return html+'</div>';
+        return h+'</div>';
       }
-
-      function resultDisplay(rawN,p,color,isNeg=false){
-        const negS=isNeg?`<span style="font-size:28px;font-weight:700;color:${color};margin-right:2px;">−</span>`:'';
-        if(rawN===0)return`<div style="text-align:center;margin-top:8px;font-size:26px;font-weight:700;color:#9a8470;">0</div>`;
-        if(rawN%p===0)return`<div style="text-align:center;margin-top:8px;display:flex;align-items:center;justify-content:center;">${negS}<span style="font-size:32px;font-weight:700;color:${color};">${rawN/p}</span></div>`;
-        const[fn,fd]=simplify(rawN,p);
-        const lwI=Math.max(28,Math.max(String(fn).length,String(fd).length)*14);
-        const improper=`<span class="fp-frac" style="color:${color};font-size:26px;"><span>${fn}</span><span class="fp-fline" style="width:${lwI}px;background:${color};"></span><span>${fd}</span></span>`;
-        if(fn<fd)return`<div style="display:flex;align-items:center;justify-content:center;margin-top:8px;">${negS}${improper}</div>`;
-        const whole=Math.floor(fn/fd),remN=fn%fd;
-        const lwM=Math.max(28,Math.max(String(remN).length,String(fd).length)*14);
-        const mixed=`<div style="display:inline-flex;align-items:center;gap:4px;"><span style="font-size:30px;font-weight:700;color:${color};">${whole}</span><span class="fp-frac" style="color:${color};font-size:22px;"><span>${remN}</span><span class="fp-fline" style="width:${lwM}px;background:${color};"></span><span>${fd}</span></span></div>`;
-        return`<div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:8px;">${negS}${improper}<span style="font-size:16px;color:#9a8470;">=</span>${negS}${mixed}</div>`;
+      const rowsFor=(n,d)=>Math.max(1,Math.ceil(Math.abs(n)/d));
+      function fracBars(n,d,color){ const a=Math.abs(n); return bars(d,rowsFor(a,d),i=>i<a?color:''); }
+      function wrow(label,sub,inner,color){
+        return `<div class="fp-wrow"><div class="fp-wlbl" style="color:${color};">${label} <span>${sub}</span></div>${inner}</div>`;
       }
+      const paren=t=>t.startsWith(MINUS)?'('+t+')':t;
 
-      function divResultDisplay(rawNum,rawDen,color,isNeg=false){
-        const[fn,fd]=simplify(rawNum,rawDen);
-        const lwI=Math.max(32,Math.max(String(fn).length,String(fd).length)*16);
-        const negS=isNeg?`<span style="font-size:28px;font-weight:700;color:${color};margin-right:2px;">−</span>`:'';
-        let html=`<div class="div-result-box">`;
-        if(fd===1){
-          html+=`<div style="text-align:center;display:flex;align-items:center;justify-content:center;">${negS}<span style="font-size:32px;font-weight:700;color:${color};">${fn}</span></div>`;
-        } else if(fn<fd){
-          html+=`<div style="display:flex;align-items:center;justify-content:center;">${negS}<span style="display:inline-flex;flex-direction:column;align-items:center;font-size:28px;font-weight:700;color:${color};line-height:1.2;"><span>${fn}</span><span style="display:block;width:${lwI}px;height:3px;background:${color};border-radius:2px;margin:5px 0;"></span><span>${fd}</span></span></div>`;
-        } else {
-          const whole=Math.floor(fn/fd),remN=fn%fd;
-          const lwM=Math.max(28,Math.max(String(remN).length,String(fd).length)*14);
-          const improper=`<span style="display:inline-flex;flex-direction:column;align-items:center;font-size:28px;font-weight:700;color:${color};line-height:1.2;"><span>${fn}</span><span style="display:block;width:${lwI}px;height:3px;background:${color};border-radius:2px;margin:5px 0;"></span><span>${fd}</span></span>`;
-          const mixed=`<div style="display:inline-flex;align-items:center;gap:4px;"><span style="font-size:30px;font-weight:700;color:${color};">${whole}</span><span class="fp-frac" style="color:${color};font-size:22px;"><span>${remN}</span><span class="fp-fline" style="width:${lwM}px;background:${color};"></span><span>${fd}</span></span></div>`;
-          html+=`<div style="display:flex;align-items:center;justify-content:center;gap:12px;">${negS}${improper}<span style="font-size:16px;color:#9a8470;">=</span>${negS}${mixed}</div>`;
-          if(rawNum!==fn||rawDen!==fd)html+=`<div class="div-simplified">unsimplified: <span>${rawNum}/${rawDen}</span></div>`;
+      // Number line in units of 1/L. Used for + and − whenever anything is negative.
+      function numberLine(aL,rL,L,op,bL){
+        let lo=Math.floor(Math.min(0,aL,rL)/L), hi=Math.ceil(Math.max(0,aL,rL)/L);
+        if(lo<0) hi=Math.max(hi,1);
+        if(hi<=lo) hi=lo+1;
+        const span=hi-lo, pct=v=>((v/L-lo)/span*100);
+        let h='<div class="fp-nl"><div class="fp-nl-axis"></div>';
+        for(let w=lo;w<=hi;w++){
+          h+=`<div class="fp-nl-tick whole${w===0?' zero':''}" style="left:${pct(w*L)}%"></div>`+
+             `<div class="fp-nl-num" style="left:${pct(w*L)}%">${w<0?MINUS+(-w):w}</div>`;
+          if(w<hi&&span*L<=72) for(let k=1;k<L;k++) h+=`<div class="fp-nl-tick" style="left:${pct(w*L+k)}%"></div>`;
         }
-        return html+'</div>';
+        const xa=pct(aL), xr=pct(rL);
+        if(aL!==rL){
+          h+=`<div class="fp-nl-arrow ${xr>xa?'right':'left'}" style="left:${Math.min(xa,xr)}%;width:${Math.abs(xr-xa)}%;background:${CB};color:${CB};"></div>`+
+             `<div class="fp-nl-lbl" style="top:0;left:${(xa+xr)/2}%;color:${CB};">${OP_SYM[op]} ${paren(fracText(bL,L))}</div>`;
+        }
+        h+=`<div class="fp-nl-dot" style="left:${xa}%;background:${CA};"></div>`+
+           `<div class="fp-nl-dot" style="left:${xr}%;background:${CR};"></div>`+
+           `<div class="fp-nl-lbl" style="top:96px;left:${xa}%;color:${CA};">start</div>`;
+        if(Math.abs(xr-xa)>10) h+=`<div class="fp-nl-lbl" style="top:96px;left:${xr}%;color:${CR};">answer</div>`;
+        return h+'</div>';
       }
 
-      function makeBarWithArrows(colorArr,cellW,h,groupSize,fullGroups,remainder,lcd){
+      function answerHTML(n,d,color){
+        let h=`<div class="fp-answer">${fracHTML(n,d,color,{words:true,skipSame:true})}</div>`;
+        const[sn,sd]=simplify(Math.abs(n),d);
+        if(n!==0&&sd!==d) h+=`<div class="fp-answer-note">Simplest form: <b>${fracText(n<0?-sn:sn,sd)}</b> — top and bottom both divided by ${d/sd}.</div>`;
+        else if(n!==0&&d>1) h+=`<div class="fp-answer-note">Already in simplest form — top and bottom share no factor.</div>`;
+        return h;
+      }
+
+      /* ---------- Solve: + and − as a walkthrough ---------- */
+      function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+      function startWalk(){
+        const a=signed(SA), b=signed(SB), dA=SA.d, dB=SB.d, L=lcm(dA,dB);
+        const aL=a*(L/dA), bL=b*(L/dB), rL=activeOp==='+'?aL+bL:aL-bL;
+        const steps=['compare']; if(dA!==dB) steps.push('recut'); steps.push('combine','answer');
+        let opts=null;
+        if(dA!==dB){
+          // the LCD, the product when it differs, and a size that fails
+          opts=[L]; if(dA*dB!==L) opts.push(dA*dB);
+          for(let c=dA+dB;;c++){ if((c%dA||c%dB)&&!opts.includes(c)){ opts.push(c); break; } }
+          shuffle(opts);
+        }
+        wt={steps,i:0,a,b,dA,dB,L,aL,bL,rL,op:activeOp,opts,pick:null,answered:false,
+            line:negMode||a<0||b<0||rL<0};
+        renderWalk();
+        resultArea().scrollIntoView({behavior:'smooth',block:'start'});
+      }
+
+      function walkBody(step){
+        const w=wt, word=OP_WORD[w.op];
+        if(step==='compare'){
+          let h=wrow('Fraction A:',fracText(w.a,w.dA)+' — pieces of size 1/'+w.dA,fracBars(w.a,w.dA,CA),CA)+
+                wrow('Fraction B:',fracText(w.b,w.dB)+' — pieces of size 1/'+w.dB,fracBars(w.b,w.dB,CB),CB);
+          if(w.a<0||w.b<0) h+=`<div class="fp-answer-note">A bar shows how big a fraction is. The minus sign says which side of zero it sits — you'll see that on the number line.</div>`;
+          if(w.dA===w.dB) return h+`<div class="fp-wt-say good">Both are cut into pieces of size <b>1/${w.dA}</b> — the same size. Same-size pieces can be counted together straight away, so there's nothing to re-cut.</div>`;
+          const piece=(d,c)=>`<div><div class="fp-piece" style="width:${Math.max(8,Math.round(200/d))}px;background:${c};"></div><div class="fp-piece-lbl">one 1/${d} piece</div></div>`;
+          return h+`<div class="fp-pieces">${piece(w.dA,CA)}${piece(w.dB,CB)}</div>`+
+            `<div class="fp-wt-say stop">One piece of A and one piece of B are <b>different sizes</b>. "${Math.abs(w.a)} pieces ${w.op==='+'?'plus':'minus'} ${Math.abs(w.b)} pieces" would mean nothing — like adding 3 apples to 2 oranges. To ${word} them, both must be re-cut to one size first.</div>`;
+        }
+        if(step==='recut'){
+          let h=`<div class="fp-wt-say">What size piece can <b>1/${w.dA}</b> pieces and <b>1/${w.dB}</b> pieces both be cut into, with nothing left over?</div>`+
+            `<div class="fp-pick">${w.opts.map(x=>{
+              const st=w.pick===null?'':(x===w.L&&w.pick===x)?'right':(w.pick===x?(x%w.dA||x%w.dB?'wrong':'okish'):'');
+              return `<button type="button" data-pick="${x}" class="${st}" ${w.pick===w.L||(w.pick!==null&&!(w.pick%w.dA||w.pick%w.dB))?'disabled':''}>1/${x}</button>`;
+            }).join('')}</div>`;
+          if(w.pick===null) return h;
+          const p=w.pick;
+          if(p%w.dA||p%w.dB){
+            const bad=p%w.dA?w.dA:w.dB;
+            return h+`<div class="fp-wt-say stop">1/${p} doesn't work: ${p} isn't a multiple of ${bad}, so a 1/${bad} piece can't be cut evenly into ${p}ths. Try another.</div>`;
+          }
+          const k1=w.L/w.dA, k2=w.L/w.dB;
+          h+=`<div class="fp-wt-say good">${p===w.L?'Yes — ':`1/${p} works — every piece fits — but it isn't the smallest. We'll use <b>1/${w.L}</b>; it keeps the numbers small. `}${lcdLine(w.dA,w.dB)}</div>`;
+          h+=wrow('Fraction A:',`${fracText(w.a,w.dA)} = ${fracText(w.aL,w.L)} — every piece cut into ${k1}`,fracBars(w.aL,w.L,CA),CA)+
+             wrow('Fraction B:',`${fracText(w.b,w.dB)} = ${fracText(w.bL,w.L)} — every piece cut into ${k2}`,fracBars(w.bL,w.L,CB),CB);
+          return h+`<div class="fp-answer-note">Nothing changed value — only the piece size. Now the pieces match.</div>`;
+        }
+        if(step==='combine'){
+          const L=w.L, A=Math.abs(w.aL), B=Math.abs(w.bL), R=w.rL;
+          if(w.line){
+            let why;
+            if(w.op==='+') why=w.b>=0?'Adding a positive moves <b>right</b>.':'Adding a negative moves <b>left</b> — it works like taking away.';
+            else why=w.b>=0?'Subtracting moves <b>left</b>.':'Subtracting a negative moves <b>right</b> — taking away a debt leaves you better off.';
+            const below=!negMode&&R<0?'You are taking away more than A has, so the answer goes <b>below zero</b>. ':'';
+            return numberLine(w.aL,R,L,w.op,w.bL)+
+              `<div class="fp-wt-say">${below}Start at <b>${fracText(w.aL,L)}</b>. ${why} Move ${B} piece${B===1?'':'s'} of size 1/${L} and land on <b>${fracText(R,L)}</b>.</div>`;
+          }
+          if(w.op==='+'){
+            return bars(L,rowsFor(R,L),i=>i<A?CA:i<R?CB:'')+
+              `<div class="fp-legend"><div class="fp-litem"><div class="fp-lswatch" style="background:${CA};"></div>A: ${A} pieces</div><div class="fp-litem"><div class="fp-lswatch" style="background:${CB};"></div>B: ${B} pieces</div></div>`+
+              `<div class="fp-wt-say">${A} pieces + ${B} pieces = <b>${R}</b> pieces, each of size 1/${L}. The bottom stays ${L} — adding counts pieces, it doesn't change their size.</div>`;
+          }
+          return bars(L,rowsFor(A,L),i=>i<R?CR:i<A?'gone':'')+
+            `<div class="fp-legend"><div class="fp-litem"><div class="fp-lswatch" style="background:repeating-linear-gradient(45deg,#f6d9cc 0 3px,#e9b9a3 3px 6px);"></div>taken away: ${B}</div><div class="fp-litem"><div class="fp-lswatch" style="background:${CR};"></div>left: ${R}</div></div>`+
+            `<div class="fp-wt-say">Start with A's ${A} pieces and take B's ${B} away (striped). <b>${R}</b> piece${R===1?'':'s'} of size 1/${L} ${R===1?'is':'are'} left.</div>`;
+        }
+        // answer
+        const chain=w.dA===w.dB
+          ? `${fracText(w.a,w.dA)} ${OP_SYM[w.op]} ${paren(fracText(w.b,w.dB))} = ${fracText(w.rL,w.L)}`
+          : `${fracText(w.a,w.dA)} ${OP_SYM[w.op]} ${paren(fracText(w.b,w.dB))} = ${fracText(w.aL,w.L)} ${OP_SYM[w.op]} ${paren(fracText(w.bL,w.L))} = ${fracText(w.rL,w.L)}`;
+        return `<div class="fp-chain">${chain}</div>`+answerHTML(w.rL,w.L,CR);
+      }
+
+      function renderWalk(){
+        const w=wt, step=w.steps[w.i], n=w.steps.length;
+        const titles={compare:'Compare the pieces',recut:'Re-cut both to one size',combine:w.op==='+'?'Put them together':'Take B away',answer:'The answer'};
+        const pickOK=w.pick!==null&&!(w.pick%w.dA||w.pick%w.dB);
+        const canNext=w.i<n-1&&(step!=='recut'||pickOK);
+        resultArea().innerHTML=`<div class="fp-result"><div class="fp-wt">
+          <div class="fp-wt-head"><span class="fp-wt-step">Step ${w.i+1} of ${n}</span><span class="fp-wt-title">${titles[step]}</span></div>
+          ${walkBody(step)}
+          <div class="fp-wt-nav">
+            <button type="button" class="fp-wt-btn" data-wt="back" ${w.i===0?'disabled':''}>← Back</button>
+            ${w.i<n-1
+              ?`<button type="button" class="fp-wt-btn primary" data-wt="next" ${canNext?'':'disabled'}>Next →</button>`
+              :`<button type="button" class="fp-wt-btn" data-wt="again">↺ Try another</button>`}
+          </div></div></div>`;
+        if(step==='answer'&&!w.answered){
+          w.answered=true;
+          MR.say(`Same-size pieces, counted: <b>${fracText(w.rL,w.L)}</b>. ${w.dA!==w.dB?'The re-cut did the real work — the rest is counting.':'With matching pieces it was just counting.'}`);
+          MR.addSimplify(Math.abs(w.rL),w.L);
+        }
+      }
+
+      document.getElementById('resultArea').addEventListener('click',function(e){
+        if(!wt) return;
+        const t=e.target.closest('button'); if(!t) return;
+        if(t.dataset.pick){ wt.pick=+t.dataset.pick; renderWalk(); return; }
+        if(t.dataset.wt==='next'&&wt.i<wt.steps.length-1){ wt.i++; renderWalk(); }
+        else if(t.dataset.wt==='back'&&wt.i>0){ wt.i--; renderWalk(); }
+        else if(t.dataset.wt==='again'){ clearResult(); document.getElementById('bA').scrollIntoView({behavior:'smooth',block:'start'}); }
+      });
+
+      /* ---------- Solve: × and ÷ (pictures unchanged from the first version) ---------- */
+      function makeBarWithArrows(colorArr,cellW,h,groupSize,fullGroups,remainder){
         const aw=cellW*colorArr.length;
         const arrowH=28, totalH=arrowH+h;
         let svg=`<svg width="${aw}" height="${totalH}" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:visible;">`;
@@ -8075,53 +8283,26 @@ filter:opacity(0.15)"></div>
         return html+'</div></div>';
       }
 
-      function dvFracHTML(n,d,color){
-        const lw=Math.max(24,Math.max(String(n).length,String(d).length)*13);
-        if(n===0)return`<span style="font-size:20px;font-weight:700;color:#9a8470;">0</span>`;
-        if(n===d)return`<span class="dv-frac" style="color:${color};"><span>1</span></span>`;
-        return`<span class="dv-frac" style="color:${color};"><span>${n}</span><span class="dv-fline" style="width:${lw}px;background:${color};"></span><span>${d}</span></span>`;
+      function signRuleHTML(sign){
+        if(!SA.neg&&!SB.neg) return '';
+        const sA=SA.neg?MINUS:'+',sB=SB.neg?MINUS:'+',sR=sign<0?MINUS:'+',sym=OP_SYM[activeOp];
+        const rule=sign<0?`A negative ${sym} a positive is <strong>negative</strong>.`:`A negative ${sym} a negative is <strong>positive</strong>.`;
+        return `<div class="fp-guide-step" style="margin-top:.75rem;">Sign rule: <strong>(${sA}) ${sym} (${sB}) = ${sR}</strong> · ${rule}</div>`;
       }
 
-      document.getElementById('solveBtn').addEventListener('click',function(){
-        const fA=getFrac(SA),fB=getFrac(SB);
-        const op=activeOp;
-        const MW=460;
+      function solveMulDiv(){
+        const nA=SA.n,dA=SA.d,nB=SB.n,dB=SB.d,MW=460;
+        const sign=(SA.neg?-1:1)*(SB.neg?-1:1);
         let inner='';
-
-        if(op==='+'||op==='-'){
-          const rawR=op==='+'?fA.rawN+fB.rawN:fA.rawN-fB.rawN;
-          const p=fA.ppr;
-          const totalSlots=Math.ceil(Math.max(fA.totalCells,Math.abs(rawR))/p)*p;
-          const absA=Math.abs(fA.rawN),absB=Math.abs(fB.rawN),absR=Math.abs(rawR);
-          const colorFn=(i)=>{
-            if(op==='+'){if(i<absA)return CA;if(i<absR)return CB;return BG;}
-            else{if(i<absR)return CR;return BG;}
-          };
-          inner+=`<div style="display:flex;justify-content:center;">${makeResultRects(totalSlots,p,colorFn,MW)}</div>`;
-          inner+=resultDisplay(Math.abs(rawR),p,CR,rawR<0);
-          inner+=`<div class="fp-legend">
-            <div class="fp-litem"><div class="fp-lswatch" style="background:${CA};"></div>Fraction A (${fA.rawN}/${p})</div>
-            ${op==='+'?`<div class="fp-litem"><div class="fp-lswatch" style="background:${CB};"></div>Fraction B (${fB.rawN}/${p})</div>`:''}
-            <div class="fp-litem"><div class="fp-lswatch" style="background:${CR};"></div>Result (${rawR<0?'-':''}${Math.abs(rawR)}/${p})</div>
-          </div>`;
-          // Dialogue
-          const speech=document.getElementById('mr-speech');
-          if(speech) MR.say(op==='+'
-            ? `See the two colours in the bar? Blue is Fraction A, red is what Fraction B added. Together they make ${Math.abs(rawR)}/${p}.`
-            : `The bar shows what's left after removing Fraction B from Fraction A. ${Math.abs(rawR)}/${p} remains.`);
-          MR.addSimplify(Math.abs(rawR), p);
-
-        } else if(op==='×'){
-          const absNA=Math.abs(fA.rawN),absNB=Math.abs(fB.rawN);
-          const dA=fA.ppr,dB=fB.ppr;
+        if(activeOp==='×'){
           // Area model grows to span as many WHOLE unit squares as each fraction needs,
           // so fractions larger than 1 (improper) are drawn truthfully — not clamped to one unit.
-          const unitsA=Math.max(1,Math.ceil(absNA/dA)),unitsB=Math.max(1,Math.ceil(absNB/dB));
+          const unitsA=Math.max(1,Math.ceil(nA/dA)),unitsB=Math.max(1,Math.ceil(nB/dB));
           const rows=unitsA*dA,cols=unitsB*dB;
           const cs=Math.max(6,Math.min(42,Math.floor(380/Math.max(rows,cols))));
           let grid=`<div style="display:flex;justify-content:center;"><div style="display:inline-grid;grid-template-columns:repeat(${cols},${cs}px);border:2px solid #c8b89a;border-radius:5px;overflow:hidden;">`;
           for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
-            const inA=r<absNA,inB=c<absNB;
+            const inA=r<nA,inB=c<nB;
             // Darker lines mark the boundary between whole units; light lines mark individual pieces.
             const unitR=(c+1)%dB===0&&c<cols-1, unitB=(r+1)%dA===0&&r<rows-1;
             const rb=c<cols-1?`border-right:${unitR?'2px solid #c8b89a':'1px solid #c8b89a44'};`:'';
@@ -8129,100 +8310,95 @@ filter:opacity(0.15)"></div>
             grid+=`<div style="width:${cs}px;height:${cs}px;background:${inA&&inB?CO:inA?CA+'66':inB?CB+'66':BG};${rb}${bb}"></div>`;
           }
           grid+=`</div></div>`;
-          const multSign=(fA.sign||1)*(fB.sign||1);
+          inner+=`<div class="fp-chain">${fracText(signed(SA),dA)} × ${paren(fracText(signed(SB),dB))} = ${fracText(sign*nA*nB,dA*dB)}</div>`;
           // Result is always measured against ONE whole (dA×dB pieces), regardless of how many units the grid spans.
-          inner+=grid+resultDisplay(absNA*absNB,dA*dB,CR,multSign<0);
+          inner+=grid+answerHTML(sign*nA*nB,dA*dB,CR);
           if(unitsA>1||unitsB>1){
             const notes=[];
-            if(unitsA>1)notes.push(`A is ${absNA}/${dA}, more than one whole — the grid is ${unitsA} units tall`);
-            if(unitsB>1)notes.push(`B is ${absNB}/${dB}, more than one whole — the grid is ${unitsB} units wide`);
-            inner+=`<div class="fp-guide-step" style="margin-top:.75rem;">${notes.join('. ')}. The darker lines mark each whole unit. The answer is still counted in pieces of size 1/${dA*dB} — ${absNA*absNB} of them.</div>`;
+            if(unitsA>1)notes.push(`A is ${nA}/${dA}, more than one whole — the grid is ${unitsA} units tall`);
+            if(unitsB>1)notes.push(`B is ${nB}/${dB}, more than one whole — the grid is ${unitsB} units wide`);
+            inner+=`<div class="fp-guide-step" style="margin-top:.75rem;">${notes.join('. ')}. The darker lines mark each whole unit. The answer is still counted in pieces of size 1/${dA*dB} — ${nA*nB} of them.</div>`;
           }
-          if(multSign!==1){
-            const sA=fA.sign<0?'−':'+',sB=fB.sign<0?'−':'+',sR=multSign<0?'−':'+';
-            const rule=multSign<0?'A negative × a positive is <strong>negative</strong>.':'A negative × a negative is <strong>positive</strong>.';
-            inner+=`<div class="fp-guide-step" style="margin-top:.75rem;">Sign rule: <strong>(${sA}) × (${sB}) = ${sR}</strong> · ${rule}</div>`;
-          }
+          inner+=signRuleHTML(sign);
           inner+=`<div class="fp-legend">
             <div class="fp-litem"><div class="fp-lswatch" style="background:${CA}66;border:1.5px solid ${CA};"></div>A rows</div>
             <div class="fp-litem"><div class="fp-lswatch" style="background:${CB}66;border:1.5px solid ${CB};"></div>B columns</div>
             <div class="fp-litem"><div class="fp-lswatch" style="background:${CO};"></div>Overlap = result</div>
           </div>`;
-          const speech=document.getElementById('mr-speech');
-          if(speech){
-            const bothUnder1=absNA>0&&absNB>0&&absNA<dA&&absNB<dB;
-            MR.say(bothUnder1
-              ? `The orange overlap IS the answer. Taking a fraction OF a fraction makes it smaller than both — see how the overlap is tinier than either colored strip?`
-              : (absNA===0||absNB===0)
-                ? `Multiplying by zero of something gives zero — there's no overlap to shade.`
-                : `The orange overlap IS the answer. Because ${absNA>=dA&&absNB>=dB?'both are':(absNA>=dA?'A is':'B is')} bigger than one whole, the product spills past a single square — count the orange pieces: ${absNA*absNB} of size 1/${dA*dB}.`);
-            MR.addSimplify(absNA*absNB, dA*dB);
-          }
-
-        } else if(op==='÷'){
-          const nA=Math.abs(fA.rawN),dA=fA.ppr,nB=Math.abs(fB.rawN),dB=fB.ppr;
-          const divSign=(fA.sign||1)*(fB.sign||1);
-          const rawResultNum=nA*dB,rawResultDen=dA*nB;
-          const g=gcd(dA,dB),lcd=(dA*dB)/g;
-          const scaleA=lcd/dA,scaleB=lcd/dB;
-          const aScaled=nA*scaleA,bScaled=nB*scaleB;
+          const bothUnder1=nA>0&&nB>0&&nA<dA&&nB<dB;
+          MR.say(bothUnder1
+            ? `The orange overlap IS the answer. Taking a fraction OF a fraction makes it smaller than both — see how the overlap is tinier than either colored strip?`
+            : (nA===0||nB===0)
+              ? `Multiplying by zero of something gives zero — there's no overlap to shade.`
+              : `The orange overlap IS the answer. Because ${nA>=dA&&nB>=dB?'both are':(nA>=dA?'A is':'B is')} bigger than one whole, the product spills past a single square — count the orange pieces: ${nA*nB} of size 1/${dA*dB}.`);
+          MR.addSimplify(nA*nB, dA*dB);
+        } else {
+          const rawNum=nA*dB,rawDen=dA*nB;
+          const L=lcm(dA,dB);
+          const aScaled=nA*(L/dA),bScaled=nB*(L/dB);
           const fullGroups=bScaled>0?Math.floor(aScaled/bScaled):0;
           const remainder=bScaled>0?aScaled%bScaled:0;
-          const CW=Math.max(5,Math.min(22,Math.floor(MW/lcd)));
+          const CW=Math.max(5,Math.min(22,Math.floor(MW/L)));
           const aMap=[],grpMap=[],bMap=[];
-          for(let i=0;i<lcd;i++){
+          for(let i=0;i<L;i++){
             aMap.push(i<aScaled?CA:BG);
             grpMap.push(i<aScaled?GROUP_PAL[bScaled>0?Math.floor(i/bScaled)%GROUP_PAL.length:0]:BG);
             bMap.push(i<bScaled?CB:BG);
           }
-          inner+=`<div class="dv-equation">${dvFracHTML(nA,dA,CA)}<span style="color:#6b5a45;">÷</span>${dvFracHTML(nB,dB,CB)}<span style="color:#6b5a45;">=</span>${nB===0?`<span style="font-size:16px;font-weight:700;color:#9a8470;">undefined</span>`:dvFracHTML(rawResultNum,rawResultDen,CR)}</div>`;
+          inner+=`<div class="fp-chain">${fracText(signed(SA),dA)} ÷ ${paren(fracText(signed(SB),dB))} = ${nB===0?'undefined':fracText(sign*rawNum,rawDen)}</div>`;
           inner+=`<div class="dv-row"><div class="dv-rowlabel" style="color:${CA};">Fraction A &nbsp;<span style="font-weight:400;font-size:11px;color:#9a8470;">${nA}/${dA}</span></div>${makeBar(aMap,CW,48)}</div>`;
-          inner+=`<div class="dv-row"><div class="dv-rowlabel" style="color:${CB};margin-bottom:4px;">Groups of B fitting inside A</div>${bScaled>0?makeBarWithArrows(grpMap,CW,48,bScaled,fullGroups,remainder,lcd):`<div style="font-size:13px;color:#9a8470;">No groups — B is 0</div>`}</div>`;
+          inner+=`<div class="dv-row"><div class="dv-rowlabel" style="color:${CB};margin-bottom:4px;">Groups of B fitting inside A</div>${bScaled>0?makeBarWithArrows(grpMap,CW,48,bScaled,fullGroups,remainder):`<div style="font-size:13px;color:#9a8470;">No groups — B is 0</div>`}</div>`;
           inner+=`<div class="dv-row"><div class="dv-rowlabel" style="color:${CB};">One group of Fraction B &nbsp;<span style="font-weight:400;font-size:11px;color:#9a8470;">${nB}/${dB}</span></div>${makeBar(bMap,CW,48)}</div>`;
           if(nB===0){
             inner+=`<div style="font-size:13px;font-weight:700;color:#9a8470;text-align:center;">Fraction B is 0 — division by zero is undefined.</div>`;
           } else {
-            inner+=divResultDisplay(rawResultNum,rawResultDen,CR,divSign<0);
+            inner+=answerHTML(sign*rawNum,rawDen,CR)+signRuleHTML(sign);
             inner+=`<div class="fp-legend">`;
             for(let i=0;i<Math.min(fullGroups+(remainder>0?1:0),GROUP_PAL.length);i++){
               inner+=`<div class="fp-litem"><div class="fp-lswatch" style="background:${i<fullGroups?GROUP_PAL[i%GROUP_PAL.length]:CO};${i===fullGroups?'opacity:.8;':''}"></div>${i<fullGroups?`Group ${i+1}`:'Remainder'}</div>`;
             }
             inner+=`<div class="fp-litem"><div style="width:24px;height:3px;background:${CR};border-radius:2px;"></div>Group count</div></div>`;
-            const speech=document.getElementById('mr-speech');
-            MR.say(`Count the brackets above the bar \u2014 each one is a full group of B fitting inside A. That count <b>is</b> the answer.`);
-            MR.addSimplify(rawResultNum, rawResultDen);
+            MR.say(`Count the brackets above the bar — each one is a full group of B fitting inside A. That count <b>is</b> the answer.`);
+            MR.addSimplify(rawNum, rawDen);
           }
         }
+        resultArea().innerHTML=`<div class="fp-result">${inner}</div>`;
+      }
 
-        document.getElementById('resultArea').innerHTML=`<div class="fp-result">${inner}</div>`;
+      document.getElementById('solveBtn').addEventListener('click',function(){
+        if(activeOp==='+'||activeOp==='-') startWalk(); else solveMulDiv();
       });
 
       document.querySelectorAll('.fp-opbtn').forEach(btn=>{
         btn.addEventListener('click',function(){
-          activeOp=this.id.replace('op','');
+          activeOp=this.dataset.op;
           document.querySelectorAll('.fp-opbtn').forEach(b=>{
-            b.classList.remove('active');
-            b.style.background=BG;b.style.color='#6b5a45';b.style.borderColor='#c8b89a';
+            const on=b===this; b.classList.toggle('active',on); b.setAttribute('aria-pressed',on?'true':'false');
           });
-          this.classList.add('active');
-          this.style.background=OP_COLORS[activeOp];
-          this.style.color='#fff';this.style.borderColor='transparent';
-          document.getElementById('resultArea').innerHTML='';
-          denomMismatchSeen=false;updateGuide();
-          // Dialogue on op switch
+          clearResult(); updateEquation(); updateGuide(false);
           const msgs={
-            '+':'To add fractions, denominators must match first. Set both to the same bottom number!',
-            '-':'Subtracting? Same rule — denominators must match. Then take the smaller numerator away.',
+            '+':'Adding counts pieces together, so the pieces must be the same size first. Press Solve and watch.',
+            '-':'Same rule as adding: match the piece size first, then take B\'s pieces away from A\'s.',
             '×':'Multiplying is the easy one — just multiply tops together and bottoms together. Watch the grid!',
             '÷':'Division flips the second fraction and multiplies. How many times does B fit inside A?'
           };
-          const speech=document.getElementById('mr-speech');
           MR.say(msgs[activeOp]||''); MR.m.operate++; MR.fire('operate', { op: activeOp });
         });
       });
 
-      initBuilder('bA',SA,CA,'Fraction A');
-      initBuilder('bB',SB,CB,'Fraction B');
+      document.getElementById('fpNegMode').addEventListener('change',function(){
+        negMode=this.checked;
+        if(!negMode){ SA.neg=false; SB.neg=false; }
+        refresh(SA); refresh(SB); clearResult(); updateEquation();
+        MR.say(negMode
+          ? 'Negative numbers are on. Each fraction has a <b>Make negative</b> switch now, and adding or subtracting happens on a number line.'
+          : 'Negative numbers are off — everything is back above zero.');
+      });
+
+      initBuilder(SA);
+      initBuilder(SB);
+      updateEquation();
+      updateGuide(false);
     })();
 
     /* ---- CONVERT ENGINE (transplanted from fraction-converter.html) ---- */

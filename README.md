@@ -16,7 +16,7 @@ Students enter through a loading screen (Mr. Fraction dancing), land on the fact
 |--------|------|------------------|
 | 01 | **Job Training** | Two bays and a workshop. **Bay A — What Fractions Are** (10 steps): what a fraction is, what each number controls, equivalence, the number line, negatives, and why some decimals never end. **Bay B — Working With Fractions** (7 steps): mixed numbers, the GCF, adding and subtracting, percents, multiplying, and dividing. **Division Workshop** (4 steps, optional): place value as an exchange, dealing out into groups, and what "bring down a zero" really means. Students pick a door and can switch at any time. |
 | 02 | **Simplifier** | Reduce fractions to lowest terms with a full Euclidean-algorithm engine, animated step reveals, and canvas pie charts. |
-| 03 | **Operations** | Add, subtract, multiply, and divide fractions with visual area models, sign toggles, LCD coaching, and division-bracket arrows. |
+| 03 | **Operations** | Build two fractions by shading pieces, then add, subtract, multiply, or divide. Adding and subtracting walk through compare → re-cut → combine → answer; multiplying uses an area model and dividing uses division-bracket arrows. Negative numbers are optional and shown on a number line. |
 | 04 | **Converter** | Change any value — fraction, decimal, or percent — and watch the others follow, with pie charts, number lines and percent bars side by side. Includes **The Remainder Belt**, a working long-division machine. |
 | 05 | **Assessment Bay** | Nine randomized, gamified challenges across four difficulty tiers. Ships only on 100% correctness, with "Try Again" on every challenge and a Certificate of Completion at the end. |
 
@@ -74,9 +74,9 @@ Repeating decimals then run through the whole site rather than sitting in one le
 
 The speech bubble is not decoration. It carries three jobs the screen cannot.
 
-**It walks through simplifications the screen performs silently.** Station 03 reduces every answer inside its render function, so a student who works out `6/8` is shown `3/4` with no account of the jump. Now:
+**It walks through simplifications the screen performs silently.** Station 03 shows an answer as counted and then in simplest form, so a student who works out `6/8` also sees `3/4`. The bubble gives the route between them:
 
-> You worked out **12/18**, but the screen shows **2/3**. Here is the route: 12/18 ÷ 2 → **6/9**, then 6/9 ÷ 3 → **2/3**. Or in one go — both divide by **6**.
+> You worked out **12/18**, and its simplest form is **2/3**. Here is the route: 12/18 ÷ 2 → **6/9**, then 6/9 ÷ 3 → **2/3**. Or in one go — both divide by **6**.
 
 Composite factors are staged, because a student who cannot spot 6 can usually spot 2. Top-heavy results get the mixed number as well. Already-simple answers produce no dialogue at all. This fires on all four operations, in the Simplifier, and on a wrong lowest-terms answer in Challenge 4.
 
@@ -85,6 +85,18 @@ Composite factors are staged, because a student who cannot spot 6 can usually sp
 **It occasionally makes a joke.** Fifteen of them, rationed by three rules: never while the student is on a wrong streak, never in the middle of an explanation, and never within four exchanges of the last one. A joke landing on someone who is stuck reads as being laughed at.
 
 > *"I asked a repeating decimal when it would be finished. Still waiting."*
+
+## Station 03, rebuilt after classroom feedback
+
+A teacher and their students found the first version of Operations hard to read. Each change below answers something they reported:
+
+- **No "Whole Numbers" control.** It only set how many empty bars were drawn, but everyone read it as the whole part of a mixed number. Students now pick the piece size (▲▼) and shade pieces, and a new empty whole appears once the last one is full. So 7/4 grows into a second bar, and the readout says *"that's 1 and 3/4"*.
+- **No sliders.** ▲▼ steppers and typed boxes replace them, in line with the ▲▼-over-drag rule below.
+- **Re-cut keeps the amount.** Changing a denominator used to wipe out the fraction that was there, so it wasn't clear whether to build equivalents from the given fractions. "Cut every piece into 2/3/4/5" multiplies the top and bottom together, and the starting fraction stays on screen.
+- **Solve always works.** With different denominators it used to switch itself off. Now it walks through each step: compare the pieces, predict a size both can be cut into, re-cut, combine, and simplify.
+- **Operation signs can't be confused with fraction signs.** The operation buttons are neutral ink and carry their names (add, subtract, multiply, divide). The colours that belong to Fraction A and Fraction B are never used for an operation. The problem is written out as `A (op) B = ?`, with negatives in parentheses: `2/5 − (−3/5)`.
+- **Negatives are opt-in, on a number line.** The old bars drew negative fractions using their absolute values, so −13/5 + 2/5 showed 13 shaded pieces. A bar can't show a negative amount, so adding and subtracting with negatives is drawn as a move along a number line.
+- **The LCD message is no longer canned.** It used to fire on every slider tick, and it asked "why not 4×3?" even when the LCD *was* 4×3. Now it speaks once things settle, and it explains differently depending on whether the denominators share a factor.
 
 ## Design priorities
 
@@ -102,9 +114,9 @@ Composite factors are staged, because a student who cannot spot 6 can usually sp
 
 ## Mobile
 
-- Station 03's controls stack below 700px — the label moves above the slider, which previously left the slider about 3px wide on a 320px phone.
+- Station 03's builders stack below 700px, and the operation buttons become a single row between them.
 - Every numeric field opens the right keypad: `inputmode="numeric"` for whole numbers, `inputmode="decimal"` for the decimal and percent boxes.
-- Station 03 gained typed number entry for whole numbers, denominator and numerator, so nobody has to tap a 5px cell.
+- Station 03 has ▲▼ steppers and typed boxes for the piece size and the pieces shaded, so nobody has to tap a 5px cell. On touch screens, its steppers and Re-cut buttons are at least 44px.
 - Page gutters tighten below 600px, and `@media (pointer: coarse)` puts a 40px minimum on small controls.
 
 ## Tech
