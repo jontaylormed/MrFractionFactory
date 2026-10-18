@@ -234,9 +234,11 @@
       cursor: pointer;
       flex-shrink: 0;
     }
+    /* about the height of the Reading & Access + For Teachers stack, so the
+       two ends of the bar balance */
     .nav-logo img {
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       object-fit: contain;
     }
     .nav-logo-text {
@@ -294,13 +296,14 @@
     /* --- Top menu layout ---------------------------------------------------
        Logo · the station buttons, all one size · and, set apart on the right,
        a large Reading & Access button with a smaller For Teachers under it.
-       Nothing scrolls sideways at any width: as the screen narrows, the
-       station buttons move to their own row, then into a 3 × 2 grid, then
-       stack icon over label. */
+       The station buttons always sit BETWEEN Mr. Fraction and the tools, on
+       the same line: one row of six when there is room, a 3 × 2 block when
+       there isn't. Only on phones do they drop below. Nothing scrolls
+       sideways at any width. */
     .nav-bar { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; column-gap:18px; row-gap:10px; }
     /* station buttons: compact pills, all one size — they shouldn't outweigh the bar */
-    .nav-links { display:grid; grid-template-columns:repeat(6, minmax(0,136px)); justify-content:start; align-items:stretch; gap:6px; min-width:0; }
-    .nav-links .nav-btn { justify-content:center; width:100%; min-height:34px; padding:5px 8px; gap:5px; font-size:12px; border-width:1.5px; border-radius:18px; text-align:center; white-space:normal; line-height:1.15; }
+    .nav-links { display:grid; grid-template-columns:repeat(6, minmax(0,136px)); grid-auto-rows:1fr; justify-content:center; align-content:center; align-items:stretch; gap:6px; min-width:0; }
+    .nav-links .nav-btn { justify-content:center; width:100%; min-height:34px; padding:5px 6px; gap:5px; font-size:12px; border-width:1.5px; border-radius:18px; text-align:center; white-space:normal; line-height:1.15; }
     .nav-links .nav-btn .nav-icon { font-size:12px; }
     .nav-tools { display:flex; flex-direction:column; align-items:stretch; gap:6px; padding-left:18px; border-left:2px solid var(--border-light); }
     .ra-btn {
@@ -317,17 +320,33 @@
     .nav-tools .nav-teach { justify-content:center; min-height:32px; padding:4px 12px; font-size:12px; border-style:dashed; border-radius:12px; }
     .nav-teach .nav-icon { font-size:12px; }
 
-    /* not enough room for one row: station buttons take a full-width row of their own */
+    /* not enough room for six across: four on top, the last two centred under
+       them, still between Mr. Fraction and the tools. Eight half-columns, each
+       button spanning two, so the second row can start at column 3 and sit
+       centred. Two pill rows (74px) are shorter than the tools stack. */
     @media (max-width: 1400px) {
+      .nav-links { grid-template-columns:repeat(8, minmax(0,65px)); }
+      .nav-links .nav-btn { grid-column:span 2; }
+      .nav-links .nav-btn:nth-child(5) { grid-column:3 / span 2; }
+    }
+    /* tablets: Mr. Fraction keeps his picture but drops the wordmark to make
+       room, and the pill icons go — they would wrap the labels onto two lines */
+    @media (max-width: 1000px) {
+      .nav-logo-text { display:none; }
+      .nav-links .nav-btn .nav-icon { display:none; }
+    }
+    /* narrow tablets and phones: no room beside the tools, so the 4 + 2 block
+       takes its own row under them */
+    @media (max-width: 860px) {
       .nav-logo  { grid-column:1; grid-row:1; }
       .nav-tools { grid-column:3; grid-row:1; }
-      .nav-links { grid-column:1 / -1; grid-row:2; justify-content:center; }
+      .nav-links { grid-column:1 / -1; grid-row:2; }
     }
-    /* phones and small tablets: a 3 × 2 grid, and the menu stops being sticky —
-       three rows pinned to the top would eat a third of a phone screen */
+    /* phones: the menu stops being sticky — three rows pinned to the top would
+       eat a third of a phone screen — and the block fills the width */
     @media (max-width: 700px) {
       .nav-bar { position:relative; padding:10px 12px; column-gap:10px; }
-      .nav-links { grid-template-columns:repeat(3, minmax(0,1fr)); gap:6px; }
+      .nav-links { grid-template-columns:repeat(8, minmax(0,1fr)); gap:6px; }
     }
     @media (max-width: 480px) {
       .nav-logo-text { display:none; }
@@ -2536,7 +2555,7 @@
       /* Station chooser becomes a single column */
       .station-cards { grid-template-columns: 1fr; }
       .nav-logo-sub { display: none; }
-      .nav-logo img { width: 50px; height: 50px; }
+      .nav-logo img { width: 60px; height: 60px; }
 
       /* Tighten the 3-up match grid (fraction / decimal / percent) */
       .ff-match-grid { gap: 6px; }
