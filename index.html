@@ -3380,6 +3380,7 @@
     .mx-cell.fb:nth-child(even) { background:#2C8474; }
     .mx-cell.gone { background:repeating-linear-gradient(45deg,#e3d4bb 0 5px,#d3c1a3 5px 10px); }
     .mx-count { font-size:11.5px; color:var(--brown-muted); text-align:right; margin-top:3px; }
+    .mx-bars { display:flex; flex-direction:column; gap:6px; }
 
     .mx-verdict { border-radius:var(--radius-sm); padding:11px 14px; font-size:14.5px;
                   line-height:1.6; border:2px solid var(--border-light);
@@ -6259,23 +6260,42 @@ filter:opacity(0.15)"></div>
       return { L:L, a:a, b:b, total: mxOp === '+' ? a + b : a - b };
     }
 
-    function mxBar(cls, cuts, filled, fillCls, extra){
-      let cells = '';
-      for (let i = 0; i < cuts; i++){
-        let c = 'mx-cell';
-        if (i < filled) c += ' ' + fillCls;
-        else if (extra && i < filled + extra) c += ' gone';
-        cells += '<div class="' + c + '"></div>';
+    /* One bar per whole. A sum like 5/5 + 4/5 = 9/5 is MORE than one whole,
+       so it needs a second bar — cramming 9 pieces into a bar cut into 5
+       drew "9 of 5 pieces", which is not a picture of 9/5 at all.
+       splitA (optional): the first splitA filled pieces are A's colour and
+       the rest B's, so a sum shows where each piece came from. */
+    function mxBar(cls, cuts, filled, fillCls, extra, splitA){
+      const shown = filled + (extra || 0);
+      const wholes = Math.max(1, Math.ceil(shown / cuts));
+      let bars = '';
+      for (let w = 0; w < wholes; w++){
+        let cells = '';
+        for (let k = 0; k < cuts; k++){
+          const i = w * cuts + k;
+          let c = 'mx-cell';
+          if (i < filled) c += ' ' + (splitA != null ? (i < splitA ? 'fa' : 'fb') : fillCls);
+          else if (extra && i < filled + extra) c += ' gone';
+          cells += '<div class="' + c + '"></div>';
+        }
+        bars += '<div class="mx-bar">' + cells + '</div>';
       }
-      return '<div class="mx-bar">' + cells + '</div>';
+      return '<div class="mx-bars">' + bars + '</div>';
     }
 
-    function mxRowHTML(cls, n, d, label, fillCls, extra){
+    function mxRowHTML(cls, n, d, label, fillCls, extra, splitA){
+      const shown = n + (extra || 0), many = shown > d;
+      let count;
+      if (n > d){
+        const w = Math.floor(n / d), r = n % d;
+        count = n + ' pieces of size 1/' + d + ' — that’s ' + w + ' whole' + (w === 1 ? '' : 's') +
+                (r ? ' and ' + r + '/' + d : '');
+      } else count = n + ' of ' + d + ' pieces';
       return '<div class="mx-row ' + cls + '">' +
                '<div class="mx-lbl"><span class="n">' + label + '</span>' +
-               '<span>the whole cut into ' + d + '</span></div>' +
-               mxBar(cls, d, n, fillCls, extra) +
-               '<div class="mx-count">' + n + ' of ' + d + ' pieces</div>' +
+               '<span>' + (many ? 'each whole cut into ' : 'the whole cut into ') + d + '</span></div>' +
+               mxBar(cls, d, n, fillCls, extra, splitA) +
+               '<div class="mx-count">' + count + '</div>' +
              '</div>';
     }
 
@@ -6346,12 +6366,17 @@ filter:opacity(0.15)"></div>
            : 'Take ' + P.b + ' away from ' + P.a + ' and <b>' + t + '</b> are left.') +
           ' The <b>bottom stays ' + L + '</b> — re-cutting never changed how big a piece is.';
         set('mx-result',
-          mxRowHTML('r', Math.max(t,0), L, (t) + '/' + L, mxOp==='+'?'fa':'fa', mxOp==='-'?P.b:0));
+          mxRowHTML('r', Math.max(t,0), L, (t) + '/' + L, 'fa', mxOp==='-'?P.b:0, mxOp==='+'?P.a:null));
+        // the re-cut step only belongs in the sum when something was re-cut
+        const recutStep = (mxD1 === mxD2) ? '' : ' = ' + P.a + '/' + L + ' ' + mxOp + ' ' + P.b + '/' + L;
+        // more than one whole: finish with the mixed number, from the simplest form
+        const sn = t / g, sd = L / g;
+        const mixed = (t > 0 && sd !== 1 && sn > sd) ? ' = <span class="g">' + Math.floor(sn/sd) + '&#8239;' + (sn % sd) + '/' + sd + '</span>' : '';
+        const simplest = (g > 1 && t !== 0) ? ' = <span class="g">' + (sd === 1 ? sn : sn + '/' + sd) + '</span>' : '';
         res.insertAdjacentHTML('beforeend',
           '<div class="mx-sum">' + mxN1 + '/' + mxD1 + ' ' + mxOp + ' ' + mxN2 + '/' + mxD2 +
-          ' = ' + P.a + '/' + L + ' ' + mxOp + ' ' + P.b + '/' + L +
-          ' = <span class="g">' + t + '/' + L + '</span>' +
-          (g > 1 && t !== 0 ? ' = <span class="g">' + (t/g) + '/' + (L/g) + '</span>' : '') + '</div>' +
+          recutStep +
+          ' = <span class="g">' + t + '/' + L + '</span>' + simplest + mixed + '</div>' +
           (g > 1 && t !== 0 ? '<div style="text-align:center;font-size:13px;color:var(--brown-muted);">' +
             'and that simplifies — the GCF machine would divide both by ' + g + '.</div>' : ''));
         steps.innerHTML = '<button class="btn btn-outline" onclick="mxReset()">↺ Try another pair</button>';
