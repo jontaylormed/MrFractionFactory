@@ -936,17 +936,26 @@
     /* Establishing "here's the factory" scene on the home page.
        Building PNG is matted to transparent, so it sits directly on
        the cream with a soft drop shadow — no frame. */
+    /* It sits in the hero's middle column, between the welcome text and Mr.
+       Fraction; below 1100px it drops under them as a full-width row. */
     .home-factory-scene {
       position: relative;
+      flex: 1 1 300px;
+      min-width: 0;
+      align-self: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin: 4px auto 8px;
-      padding: 0 20px;
     }
+    /* The PNG is 2160×1620 with transparent margins (rows 180–1438, cols
+       358–1802 are the building). This frame has the building's own shape,
+       and the image is positioned inside it so only the margins fall
+       outside — the empty space no longer takes up room on the page. */
     .home-factory-link {
       position: relative;
-      display: inline-block;
+      display: block;
+      width: min(100%, 440px);
+      aspect-ratio: 1444 / 1258;
       cursor: pointer;
       border-radius: 14px;
       outline: none;
@@ -960,10 +969,13 @@
       box-shadow: 0 0 0 4px var(--orange);
     }
     .home-factory-scene img {
-      width: 100%;
-      max-width: 560px;
+      position: absolute;
+      width: 149.6%;          /* 2160 / 1444 */
+      max-width: none;
       height: auto;
-      object-fit: contain;
+      left: -24.8%;           /* 358 / 1444 */
+      top: -14.3%;            /* 180 / 1258 */
+      pointer-events: none;   /* the frame, not the transparent margins, takes the click */
       filter: drop-shadow(0 14px 18px rgba(110,75,28,0.20));
       animation: factory-bob 7s ease-in-out infinite;
     }
@@ -1004,8 +1016,25 @@
       font-size: 14px;
       letter-spacing: 0.06em;
       color: var(--brown-muted);
-      margin-top: 6px;
+      margin-top: 10px;
       text-align: center;
+    }
+    /* not enough room for three columns: two instead — the welcome text with a
+       smaller Mr. Fraction under it on the left, the factory on the right
+       spanning both. The factory never drops into a block of its own. */
+    @media (min-width: 821px) and (max-width: 1099px) {
+      .home-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas: "text factory" "mr factory";
+        align-items: start;
+        column-gap: 28px;
+        row-gap: 4px;
+      }
+      .home-hero-left { grid-area: text; max-width: none; }
+      .home-hero-right { grid-area: mr; flex-direction: row; justify-content: flex-start; padding: 0 !important; }
+      .home-hero-img { width: 120px; height: 120px; }
+      .home-factory-scene { grid-area: factory; align-self: center; }
     }
     @keyframes factory-bob {
       0%, 100% { transform: translateY(0); }
@@ -2520,7 +2549,8 @@
 
       /* Section spacing + the factory banner */
       .stations-section { padding: 0 20px 28px; }
-      .home-factory-scene { padding: 0 12px; }
+      .home-factory-scene { padding: 0 12px; flex-basis: auto; width: 100%; }
+      .home-factory-link { width: min(100%, 280px); }
 
       /* Station chooser drops from 5 columns to 2 */
       .station-cards { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -3694,6 +3724,17 @@ filter:opacity(0.10);animation:gear-spin 35s linear infinite reverse;pointer-eve
         </p>
         </div><!-- /z-index wrapper -->
       </div>
+      <!-- The factory sits in the hero, between the welcome text and Mr. Fraction,
+           so the stations are reachable without scrolling past a separate block. -->
+      <div class="home-factory-scene">
+        <a class="home-factory-link" href="https://www.youtube.com/watch?v=oMwsgJaZXIs"
+           target="_blank" rel="noopener noreferrer"
+           aria-label="Play the Mr. Fraction factory video on YouTube (opens in a new tab)">
+          <img src="Mr__Fraction_Factory.png" alt="Mr. Fraction's Fraction Factory building">
+          <span class="home-factory-play" aria-hidden="true"></span>
+        </a>
+        <div class="home-factory-caption">▶ Click the factory for a tour — then choose a station below</div>
+      </div>
       <div class="home-hero-right" style="position:relative;padding:20px 30px 20px 20px;">
         <!-- Decorative gears around Mr. Fraction -->
         <div style="position:absolute;top:-35px;right:-25px;width:110px;height:110px;pointer-events:none;animation:gear-spin 10s linear infinite;"><img src="Gear.png" alt="" style="width:100%;height:100%;object-fit:contain;
@@ -3707,16 +3748,6 @@ filter:opacity(0.15)"></div>
         <div class="home-speech" style="animation: hero-float 3.5s ease-in-out infinite 0.4s;">Ready to make fractions? Let's go! 🏭</div>
         <div class="home-hero-img-wrap"><img src="Mr__Fraction_Front.png" alt="Mr. Fraction" class="home-hero-img"></div>
       </div>
-    </div>
-
-    <div class="home-factory-scene">
-      <a class="home-factory-link" href="https://www.youtube.com/watch?v=oMwsgJaZXIs"
-         target="_blank" rel="noopener noreferrer"
-         aria-label="Play the Mr. Fraction factory video on YouTube (opens in a new tab)">
-        <img src="Mr__Fraction_Factory.png" alt="Mr. Fraction's Fraction Factory building">
-        <span class="home-factory-play" aria-hidden="true"></span>
-      </a>
-      <div class="home-factory-caption">▶ Click the factory for a tour — then choose a station below</div>
     </div>
 
     <div class="stations-section">
