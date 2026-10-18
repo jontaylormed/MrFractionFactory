@@ -7875,8 +7875,9 @@ filter:opacity(0.15)"></div>
        - "Re-cut" is the one control that keeps the amount and changes the
          piece size — the equivalent-fraction move, made explicit, with the
          starting fraction kept on screen.
-       - Solve always works. For + and − it walks through compare → re-cut →
-         combine → answer instead of disabling itself.
+       - Solve always works, and every operation walks through its steps
+         (+ − : compare, re-cut, combine; × : B, A of B, count; ÷ : compare,
+         re-cut, count the groups) before showing the answer.
        - Each fraction has one "Negative" box at its top. Anything negative is
          added or subtracted on a number line: a bar cannot show a negative
          amount, and the old bars silently used absolute values.
@@ -8133,24 +8134,61 @@ filter:opacity(0.15)"></div>
         return h;
       }
 
-      /* ---------- Solve: + and − as a walkthrough ---------- */
+      /* ---------- Solve: every operation is a step-by-step walkthrough ----------
+         +  and −  compare → re-cut → combine → answer
+         ×         start with B → take A of it → count the pieces → answer (area model)
+         ÷         compare → re-cut → how many B fit in A → answer (measurement model)
+         Pictures show sizes. Signs are handled on the number line (+, −) or
+         by the sign rule in the answer (×, ÷). */
       function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
+      // the LCD, the product when it differs, and a size that fails
+      function lcdOptions(dA,dB,L){
+        const o=[L]; if(dA*dB!==L) o.push(dA*dB);
+        for(let c=dA+dB;;c++){ if((c%dA||c%dB)&&!o.includes(c)){ o.push(c); break; } }
+        return shuffle(o);
+      }
+      // pieces in one whole once it is cut both ways: the product, and the two tempting miscounts
+      function mulOptions(dA,dB){
+        const P=dA*dB, o=[P];
+        [dA+dB,Math.max(dA,dB),P+1].forEach(x=>{ if(o.length<3&&!o.includes(x)) o.push(x); });
+        return shuffle(o);
+      }
+
       function startWalk(){
-        const a=signed(SA), b=signed(SB), dA=SA.d, dB=SB.d, L=lcm(dA,dB);
-        const aL=a*(L/dA), bL=b*(L/dB), rL=activeOp==='+'?aL+bL:aL-bL;
-        const steps=['compare']; if(dA!==dB) steps.push('recut'); steps.push('combine','answer');
-        let opts=null;
-        if(dA!==dB){
-          // the LCD, the product when it differs, and a size that fails
-          opts=[L]; if(dA*dB!==L) opts.push(dA*dB);
-          for(let c=dA+dB;;c++){ if((c%dA||c%dB)&&!opts.includes(c)){ opts.push(c); break; } }
-          shuffle(opts);
-        }
-        wt={steps,i:0,a,b,dA,dB,L,aL,bL,rL,op:activeOp,opts,pick:null,answered:false,
-            line:a<0||b<0||rL<0};
+        const op=activeOp, a=signed(SA), b=signed(SB), dA=SA.d, dB=SB.d, L=lcm(dA,dB);
+        const aL=a*(L/dA), bL=b*(L/dB);
+        const rL=op==='+'?aL+bL:op==='-'?aL-bL:0;
+        let steps;
+        if(op==='×') steps=['mulB','mulA','mulCount','answer'];
+        else { steps=['compare']; if(dA!==dB) steps.push('recut'); steps.push(op==='÷'?'groups':'combine','answer'); }
+        wt={op,steps,i:0,a,b,dA,dB,L,aL,bL,rL,nA:SA.n,nB:SB.n,
+            sign:(SA.neg?-1:1)*(SB.neg?-1:1),
+            opts:op!=='×'&&dA!==dB?lcdOptions(dA,dB,L):null,
+            mopts:op==='×'?mulOptions(dA,dB):null,
+            pick:null,mpick:null,answered:false,
+            line:(op==='+'||op==='-')&&(a<0||b<0||rL<0)};
         renderWalk();
         resultArea().scrollIntoView({behavior:'smooth',block:'start'});
+      }
+
+      // Area model. Before A is taken, the square is cut into B's columns only —
+      // A's row cuts appear in the next step, so the student sees them arrive.
+      function areaGrid(w,showA){
+        const nA=w.nA,dA=w.dA,nB=w.nB,dB=w.dB;
+        const unitsA=Math.max(1,Math.ceil(nA/dA)),unitsB=Math.max(1,Math.ceil(nB/dB));
+        const rows=unitsA*dA,cols=unitsB*dB;
+        const cs=Math.max(6,Math.min(42,Math.floor(340/Math.max(rows,cols))));
+        let g=`<div style="display:flex;justify-content:center;margin:8px 0;"><div style="display:inline-grid;grid-template-columns:repeat(${cols},${cs}px);border:2px solid #c8b89a;border-radius:5px;overflow:hidden;">`;
+        for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+          const inA=showA&&r<nA,inB=c<nB;
+          // Darker lines mark the boundary between whole units; light lines mark individual pieces.
+          const unitR=(c+1)%dB===0&&c<cols-1, unitB=(r+1)%dA===0&&r<rows-1;
+          const rb=c<cols-1?`border-right:${unitR?'2px solid #c8b89a':'1px solid #c8b89a44'};`:'';
+          const bb=r<rows-1?(unitB?'border-bottom:2px solid #c8b89a;':showA?'border-bottom:1px solid #c8b89a44;':''):'';
+          g+=`<div style="width:${cs}px;height:${cs}px;background:${inA&&inB?CO:inA?CA+'66':inB?CB+'66':BG};${rb}${bb}"></div>`;
+        }
+        return g+`</div></div>`;
       }
 
       function walkBody(step){
@@ -8158,11 +8196,16 @@ filter:opacity(0.15)"></div>
         if(step==='compare'){
           let h=wrow('Fraction A:',fracText(w.a,w.dA)+' — pieces of size 1/'+w.dA,fracBars(w.a,w.dA,CA),CA)+
                 wrow('Fraction B:',fracText(w.b,w.dB)+' — pieces of size 1/'+w.dB,fracBars(w.b,w.dB,CB),CB);
-          if(w.a<0||w.b<0) h+=`<div class="fp-answer-note">A bar shows how big a fraction is. The minus sign says which side of zero it sits — you'll see that on the number line.</div>`;
-          if(w.dA===w.dB) return h+`<div class="fp-wt-say good">Both are cut into pieces of size <b>1/${w.dA}</b> — the same size. Same-size pieces can be counted together straight away, so there's nothing to re-cut.</div>`;
+          if(w.a<0||w.b<0) h+=`<div class="fp-answer-note">A bar shows how big a fraction is. ${w.op==='÷'?'The sign is settled at the end, by the sign rule.':"The minus sign says which side of zero it sits — you'll see that on the number line."}</div>`;
+          if(w.dA===w.dB) return h+`<div class="fp-wt-say good">Both are cut into pieces of size <b>1/${w.dA}</b> — the same size. `+
+            (w.op==='÷'
+              ? `Dividing asks <b>how many B fit inside A</b>. With same-size pieces, that's just counting groups of pieces.</div>`
+              : `Same-size pieces can be counted together straight away, so there's nothing to re-cut.</div>`);
           const piece=(d,c)=>`<div><div class="fp-piece" style="width:${Math.max(8,Math.round(200/d))}px;background:${c};"></div><div class="fp-piece-lbl">one 1/${d} piece</div></div>`;
           return h+`<div class="fp-pieces">${piece(w.dA,CA)}${piece(w.dB,CB)}</div>`+
-            `<div class="fp-wt-say stop">One piece of A and one piece of B are <b>different sizes</b>. "${Math.abs(w.a)} pieces ${w.op==='+'?'plus':'minus'} ${Math.abs(w.b)} pieces" would mean nothing — like adding 3 apples to 2 oranges. To ${word} them, both must be re-cut to one size first.</div>`;
+            (w.op==='÷'
+              ? `<div class="fp-wt-say stop">One piece of A and one piece of B are <b>different sizes</b>. To ask how many B fit inside A, both have to be measured in the same size pieces first.</div>`
+              : `<div class="fp-wt-say stop">One piece of A and one piece of B are <b>different sizes</b>. "${Math.abs(w.a)} pieces ${w.op==='+'?'plus':'minus'} ${Math.abs(w.b)} pieces" would mean nothing — like adding 3 apples to 2 oranges. To ${word} them, both must be re-cut to one size first.</div>`);
         }
         if(step==='recut'){
           let h=`<div class="fp-wt-say">What size piece can <b>1/${w.dA}</b> pieces and <b>1/${w.dB}</b> pieces both be cut into, with nothing left over?</div>`+
@@ -8177,7 +8220,7 @@ filter:opacity(0.15)"></div>
             return h+`<div class="fp-wt-say stop">1/${p} doesn't work: ${p} isn't a multiple of ${bad}, so a 1/${bad} piece can't be cut evenly into ${p}ths. Try another.</div>`;
           }
           const k1=w.L/w.dA, k2=w.L/w.dB;
-          h+=`<div class="fp-wt-say good">${p===w.L?'Yes — ':`1/${p} works — every piece fits — but it isn't the smallest. We'll use <b>1/${w.L}</b>; it keeps the numbers small. `}${lcdLine(w.dA,w.dB)}</div>`;
+          h+=`<div class="fp-wt-say good">${p===w.L?'Yes. ':`1/${p} works — every piece fits — but it isn't the smallest. We'll use <b>1/${w.L}</b>; it keeps the numbers small. `}${lcdLine(w.dA,w.dB)}</div>`;
           h+=wrow('Fraction A:',`${fracText(w.a,w.dA)} = ${fracText(w.aL,w.L)} — every piece cut into ${k1}`,fracBars(w.aL,w.L,CA),CA)+
              wrow('Fraction B:',`${fracText(w.b,w.dB)} = ${fracText(w.bL,w.L)} — every piece cut into ${k2}`,fracBars(w.bL,w.L,CB),CB);
           return h+`<div class="fp-answer-note">Nothing changed value — only the piece size. Now the pieces match.</div>`;
@@ -8201,18 +8244,105 @@ filter:opacity(0.15)"></div>
             `<div class="fp-legend"><div class="fp-litem"><div class="fp-lswatch" style="background:repeating-linear-gradient(45deg,#f6d9cc 0 3px,#e9b9a3 3px 6px);"></div>taken away: ${B}</div><div class="fp-litem"><div class="fp-lswatch" style="background:${CR};"></div>left: ${R}</div></div>`+
             `<div class="fp-wt-say">Start with A's ${A} pieces and take B's ${B} away (striped). <b>${R}</b> piece${R===1?'':'s'} of size 1/${L} ${R===1?'is':'are'} left.</div>`;
         }
+        if(step==='groups'){
+          const A=Math.abs(w.aL), B=Math.abs(w.bL), L=w.L;
+          const full=Math.floor(A/B), rem=A%B;
+          // cell width from the space actually available, so a phone never clips the bar
+          const avail=Math.min(440,Math.max(180,resultArea().clientWidth-16));
+          const total=rowsFor(A,L)*L, CW=Math.min(22,avail/total);
+          const aMap=[],bMap=[],gMap=[];
+          for(let i=0;i<total;i++){
+            aMap.push(i<A?CA:BG);
+            bMap.push(i<B?CB:BG);
+            gMap.push(i<full*B?GROUP_PAL[Math.floor(i/B)%GROUP_PAL.length]:i<A?CO:BG);
+          }
+          const times=rem?(full?`${full} and ${rem}/${B}`:`${rem}/${B}`):`${full}`;
+          return `<div class="dv-row"><div class="dv-rowlabel" style="color:${CA};">Fraction A — ${A} piece${A===1?'':'s'} of 1/${L}</div>${makeBar(aMap,CW,44)}</div>`+
+            `<div class="dv-row"><div class="dv-rowlabel" style="color:${CB};">One group the size of B — ${B} piece${B===1?'':'s'}</div>${makeBar(bMap,CW,44)}</div>`+
+            `<div class="dv-row"><div class="dv-rowlabel" style="color:${CR};margin-bottom:4px;">Groups of B fitting inside A</div>${makeBarWithArrows(gMap,CW,44,B,full,rem)}</div>`+
+            `<div class="fp-wt-say">A is ${A} piece${A===1?'':'s'}; one B is ${B}. <b>${full}</b> full group${full===1?'':'s'} of B fit${full===1?'s':''}`+
+            (rem?`, with <b>${rem}</b> piece${rem===1?'':'s'} left over. A group needs ${B}, so the leftover is <b>${rem}/${B}</b> of a group`:'')+
+            `. So B fits into A <b>${times}</b> time${times==='1'?'':'s'}.</div>`;
+        }
+        if(step==='mulB'){
+          const s=w.nB===1?'':'s', more=Math.ceil(w.nB/w.dB)>1;
+          return areaGrid(w,false)+
+            `<div class="fp-wt-say">Multiplying <b>A × B</b> means taking <b>A of B</b>. Start with B = <b>${w.nB}/${w.dB}</b>: each square is one whole, cut into ${w.dB} column${w.dB===1?'':'s'}, and ${w.nB} column${s} ${w.nB===1?'is':'are'} shaded.${more?' B is more than one whole, so it spills into another square.':''}</div>`;
+        }
+        if(step==='mulA'){
+          const under=w.nA>0&&w.nB>0&&w.nA<w.dA&&w.nB<w.dB;
+          return areaGrid(w,true)+
+            `<div class="fp-legend"><div class="fp-litem"><div class="fp-lswatch" style="background:${CA}66;border:1.5px solid ${CA};"></div>A rows</div><div class="fp-litem"><div class="fp-lswatch" style="background:${CB}66;border:1.5px solid ${CB};"></div>B columns</div><div class="fp-litem"><div class="fp-lswatch" style="background:${CO};"></div>overlap: A of B</div></div>`+
+            `<div class="fp-wt-say">Now cut the same square into <b>${w.dA}</b> row${w.dA===1?'':'s'} and take <b>${w.nA}</b> of them. The <b>orange overlap</b> is ${w.nA}/${w.dA} of the ${w.nB}/${w.dB}.`+
+            (under?' Taking a fraction <i>of</i> a fraction leaves less than either one — the orange is smaller than both strips.':'')+
+            (w.nA===0||w.nB===0?' One of them is zero, so there is no overlap at all.':'')+`</div>`;
+        }
+        if(step==='mulCount'){
+          const P=w.dA*w.dB;
+          let h=areaGrid(w,true)+`<div class="fp-wt-say">Into how many small pieces is <b>one whole square</b> cut now?</div>`+
+            `<div class="fp-pick">${w.mopts.map(x=>{
+              const st=w.mpick===x?(x===P?'right':'wrong'):'';
+              return `<button type="button" data-mpick="${x}" class="${st}" ${w.mpick===P?'disabled':''}>${x}</button>`;
+            }).join('')}</div>`;
+          if(w.mpick===null) return h;
+          if(w.mpick!==P){
+            const why=w.mpick===w.dA+w.dB
+              ? `${w.mpick} adds the cuts together, but pieces come from rows <i>times</i> columns.`
+              : `Count again: there are ${w.dA} row${w.dA===1?'':'s'}, and each one holds ${w.dB} piece${w.dB===1?'':'s'}.`;
+            return h+`<div class="fp-wt-say stop">${why} Try another.</div>`;
+          }
+          return h+`<div class="fp-wt-say good">Yes — ${w.dA} row${w.dA===1?'':'s'} × ${w.dB} column${w.dB===1?'':'s'} = <b>${P}</b> pieces in one whole, so each piece is 1/${P}. The orange part is ${w.nA} row${w.nA===1?'':'s'} × ${w.nB} column${w.nB===1?'':'s'} = <b>${w.nA*w.nB}</b> pieces. That's why you multiply tops together and bottoms together.</div>`;
+        }
         // answer
+        if(w.op==='×'){
+          const n=w.sign*w.nA*w.nB, d=w.dA*w.dB;
+          const unitsA=Math.max(1,Math.ceil(w.nA/w.dA)),unitsB=Math.max(1,Math.ceil(w.nB/w.dB));
+          let h=`<div class="fp-chain">${fracText(w.a,w.dA)} × ${paren(fracText(w.b,w.dB))} = ${w.sign<0?MINUS:''}(${w.nA}×${w.nB})/(${w.dA}×${w.dB}) = ${fracText(n,d)}</div>`+answerHTML(n,d,CR);
+          if(unitsA>1||unitsB>1){
+            const notes=[];
+            if(unitsA>1)notes.push(`A is ${w.nA}/${w.dA}, more than one whole — the grid is ${unitsA} units tall`);
+            if(unitsB>1)notes.push(`B is ${w.nB}/${w.dB}, more than one whole — the grid is ${unitsB} units wide`);
+            h+=`<div class="fp-guide-step" style="margin-top:.75rem;">${notes.join('. ')}. The darker lines mark each whole unit. The answer is still counted in pieces of size 1/${d} — ${w.nA*w.nB} of them.</div>`;
+          }
+          return h+signRuleHTML(w.sign);
+        }
+        if(w.op==='÷'){
+          const A=Math.abs(w.aL), B=Math.abs(w.bL), n=w.sign*A;
+          const chain=w.dA===w.dB
+            ? `${fracText(w.a,w.dA)} ÷ ${paren(fracText(w.b,w.dB))} = ${A} ÷ ${B} = ${fracText(n,B)}`
+            : `${fracText(w.a,w.dA)} ÷ ${paren(fracText(w.b,w.dB))} = ${fracText(w.aL,w.L)} ÷ ${paren(fracText(w.bL,w.L))} = ${A} ÷ ${B} = ${fracText(n,B)}`;
+          return `<div class="fp-chain">${chain}</div>`+answerHTML(n,B,CR)+
+            `<div class="fp-answer-note">Check with flip-and-multiply: ${fracText(w.a,w.dA)} × ${paren(fracText((w.b<0?-1:1)*w.dB,w.nB))} = ${fracText(w.sign*w.nA*w.dB,w.dA*w.nB)} — the same amount.</div>`+
+            signRuleHTML(w.sign);
+        }
         const chain=w.dA===w.dB
           ? `${fracText(w.a,w.dA)} ${OP_SYM[w.op]} ${paren(fracText(w.b,w.dB))} = ${fracText(w.rL,w.L)}`
           : `${fracText(w.a,w.dA)} ${OP_SYM[w.op]} ${paren(fracText(w.b,w.dB))} = ${fracText(w.aL,w.L)} ${OP_SYM[w.op]} ${paren(fracText(w.bL,w.L))} = ${fracText(w.rL,w.L)}`;
         return `<div class="fp-chain">${chain}</div>`+answerHTML(w.rL,w.L,CR);
       }
 
+      function answerSpeech(w){
+        if(w.op==='×'){
+          MR.say(w.nA===0||w.nB===0
+            ? `Multiplying by zero of something gives zero — there's no overlap to shade.`
+            : `The orange overlap IS the answer: <b>${w.nA*w.nB}</b> pieces of size 1/${w.dA*w.dB}.`);
+          MR.addSimplify(w.nA*w.nB,w.dA*w.dB);
+        } else if(w.op==='÷'){
+          MR.say(`Count the brackets — each one is a full group of B fitting inside A. That count <b>is</b> the answer.`);
+          MR.addSimplify(Math.abs(w.aL),Math.abs(w.bL));
+        } else {
+          MR.say(`Same-size pieces, counted: <b>${fracText(w.rL,w.L)}</b>. ${w.dA!==w.dB?'The re-cut did the real work — the rest is counting.':'With matching pieces it was just counting.'}`);
+          MR.addSimplify(Math.abs(w.rL),w.L);
+        }
+      }
+
       function renderWalk(){
         const w=wt, step=w.steps[w.i], n=w.steps.length;
-        const titles={compare:'Compare the pieces',recut:'Re-cut both to one size',combine:w.op==='+'?'Put them together':'Take B away',answer:'The answer'};
+        const titles={compare:'Compare the pieces',recut:'Re-cut both to one size',
+          combine:w.op==='+'?'Put them together':'Take B away',groups:'How many B fit in A?',
+          mulB:'Start with B',mulA:'Take A of it',mulCount:'Count the pieces',answer:'The answer'};
         const pickOK=w.pick!==null&&!(w.pick%w.dA||w.pick%w.dB);
-        const canNext=w.i<n-1&&(step!=='recut'||pickOK);
+        const canNext=w.i<n-1&&(step!=='recut'||pickOK)&&(step!=='mulCount'||w.mpick===w.dA*w.dB);
         resultArea().innerHTML=`<div class="fp-result"><div class="fp-wt">
           <div class="fp-wt-head"><span class="fp-wt-step">Step ${w.i+1} of ${n}</span><span class="fp-wt-title">${titles[step]}</span></div>
           ${walkBody(step)}
@@ -8222,23 +8352,20 @@ filter:opacity(0.15)"></div>
               ?`<button type="button" class="fp-wt-btn primary" data-wt="next" ${canNext?'':'disabled'}>Next →</button>`
               :`<button type="button" class="fp-wt-btn" data-wt="again">↺ Try another</button>`}
           </div></div></div>`;
-        if(step==='answer'&&!w.answered){
-          w.answered=true;
-          MR.say(`Same-size pieces, counted: <b>${fracText(w.rL,w.L)}</b>. ${w.dA!==w.dB?'The re-cut did the real work — the rest is counting.':'With matching pieces it was just counting.'}`);
-          MR.addSimplify(Math.abs(w.rL),w.L);
-        }
+        if(step==='answer'&&!w.answered){ w.answered=true; answerSpeech(w); }
       }
 
       document.getElementById('resultArea').addEventListener('click',function(e){
         if(!wt) return;
         const t=e.target.closest('button'); if(!t) return;
         if(t.dataset.pick){ wt.pick=+t.dataset.pick; renderWalk(); return; }
+        if(t.dataset.mpick){ wt.mpick=+t.dataset.mpick; renderWalk(); return; }
         if(t.dataset.wt==='next'&&wt.i<wt.steps.length-1){ wt.i++; renderWalk(); }
         else if(t.dataset.wt==='back'&&wt.i>0){ wt.i--; renderWalk(); }
         else if(t.dataset.wt==='again'){ clearResult(); document.getElementById('bA').scrollIntoView({behavior:'smooth',block:'start'}); }
       });
 
-      /* ---------- Solve: × and ÷ (pictures unchanged from the first version) ---------- */
+      /* ---------- drawing helpers for ÷ (division-bracket arrows) ---------- */
       function makeBarWithArrows(colorArr,cellW,h,groupSize,fullGroups,remainder){
         const aw=cellW*colorArr.length;
         const arrowH=28, totalH=arrowH+h;
@@ -8281,83 +8408,14 @@ filter:opacity(0.15)"></div>
         return `<div class="fp-guide-step" style="margin-top:.75rem;">Sign rule: <strong>(${sA}) ${sym} (${sB}) = ${sR}</strong> · ${rule}</div>`;
       }
 
-      function solveMulDiv(){
-        const nA=SA.n,dA=SA.d,nB=SB.n,dB=SB.d,MW=460;
-        const sign=(SA.neg?-1:1)*(SB.neg?-1:1);
-        let inner='';
-        if(activeOp==='×'){
-          // Area model grows to span as many WHOLE unit squares as each fraction needs,
-          // so fractions larger than 1 (improper) are drawn truthfully — not clamped to one unit.
-          const unitsA=Math.max(1,Math.ceil(nA/dA)),unitsB=Math.max(1,Math.ceil(nB/dB));
-          const rows=unitsA*dA,cols=unitsB*dB;
-          const cs=Math.max(6,Math.min(42,Math.floor(380/Math.max(rows,cols))));
-          let grid=`<div style="display:flex;justify-content:center;"><div style="display:inline-grid;grid-template-columns:repeat(${cols},${cs}px);border:2px solid #c8b89a;border-radius:5px;overflow:hidden;">`;
-          for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
-            const inA=r<nA,inB=c<nB;
-            // Darker lines mark the boundary between whole units; light lines mark individual pieces.
-            const unitR=(c+1)%dB===0&&c<cols-1, unitB=(r+1)%dA===0&&r<rows-1;
-            const rb=c<cols-1?`border-right:${unitR?'2px solid #c8b89a':'1px solid #c8b89a44'};`:'';
-            const bb=r<rows-1?`border-bottom:${unitB?'2px solid #c8b89a':'1px solid #c8b89a44'};`:'';
-            grid+=`<div style="width:${cs}px;height:${cs}px;background:${inA&&inB?CO:inA?CA+'66':inB?CB+'66':BG};${rb}${bb}"></div>`;
-          }
-          grid+=`</div></div>`;
-          inner+=`<div class="fp-chain">${fracText(signed(SA),dA)} × ${paren(fracText(signed(SB),dB))} = ${fracText(sign*nA*nB,dA*dB)}</div>`;
-          // Result is always measured against ONE whole (dA×dB pieces), regardless of how many units the grid spans.
-          inner+=grid+answerHTML(sign*nA*nB,dA*dB,CR);
-          if(unitsA>1||unitsB>1){
-            const notes=[];
-            if(unitsA>1)notes.push(`A is ${nA}/${dA}, more than one whole — the grid is ${unitsA} units tall`);
-            if(unitsB>1)notes.push(`B is ${nB}/${dB}, more than one whole — the grid is ${unitsB} units wide`);
-            inner+=`<div class="fp-guide-step" style="margin-top:.75rem;">${notes.join('. ')}. The darker lines mark each whole unit. The answer is still counted in pieces of size 1/${dA*dB} — ${nA*nB} of them.</div>`;
-          }
-          inner+=signRuleHTML(sign);
-          inner+=`<div class="fp-legend">
-            <div class="fp-litem"><div class="fp-lswatch" style="background:${CA}66;border:1.5px solid ${CA};"></div>A rows</div>
-            <div class="fp-litem"><div class="fp-lswatch" style="background:${CB}66;border:1.5px solid ${CB};"></div>B columns</div>
-            <div class="fp-litem"><div class="fp-lswatch" style="background:${CO};"></div>Overlap = result</div>
-          </div>`;
-          const bothUnder1=nA>0&&nB>0&&nA<dA&&nB<dB;
-          MR.say(bothUnder1
-            ? `The orange overlap IS the answer. Taking a fraction OF a fraction makes it smaller than both — see how the overlap is tinier than either colored strip?`
-            : (nA===0||nB===0)
-              ? `Multiplying by zero of something gives zero — there's no overlap to shade.`
-              : `The orange overlap IS the answer. Because ${nA>=dA&&nB>=dB?'both are':(nA>=dA?'A is':'B is')} bigger than one whole, the product spills past a single square — count the orange pieces: ${nA*nB} of size 1/${dA*dB}.`);
-          MR.addSimplify(nA*nB, dA*dB);
-        } else {
-          const rawNum=nA*dB,rawDen=dA*nB;
-          const L=lcm(dA,dB);
-          const aScaled=nA*(L/dA),bScaled=nB*(L/dB);
-          const fullGroups=bScaled>0?Math.floor(aScaled/bScaled):0;
-          const remainder=bScaled>0?aScaled%bScaled:0;
-          const CW=Math.max(5,Math.min(22,Math.floor(MW/L)));
-          const aMap=[],grpMap=[],bMap=[];
-          for(let i=0;i<L;i++){
-            aMap.push(i<aScaled?CA:BG);
-            grpMap.push(i<aScaled?GROUP_PAL[bScaled>0?Math.floor(i/bScaled)%GROUP_PAL.length:0]:BG);
-            bMap.push(i<bScaled?CB:BG);
-          }
-          inner+=`<div class="fp-chain">${fracText(signed(SA),dA)} ÷ ${paren(fracText(signed(SB),dB))} = ${nB===0?'undefined':fracText(sign*rawNum,rawDen)}</div>`;
-          inner+=`<div class="dv-row"><div class="dv-rowlabel" style="color:${CA};">Fraction A &nbsp;<span style="font-weight:400;font-size:11px;color:#9a8470;">${nA}/${dA}</span></div>${makeBar(aMap,CW,48)}</div>`;
-          inner+=`<div class="dv-row"><div class="dv-rowlabel" style="color:${CB};margin-bottom:4px;">Groups of B fitting inside A</div>${bScaled>0?makeBarWithArrows(grpMap,CW,48,bScaled,fullGroups,remainder):`<div style="font-size:13px;color:#9a8470;">No groups — B is 0</div>`}</div>`;
-          inner+=`<div class="dv-row"><div class="dv-rowlabel" style="color:${CB};">One group of Fraction B &nbsp;<span style="font-weight:400;font-size:11px;color:#9a8470;">${nB}/${dB}</span></div>${makeBar(bMap,CW,48)}</div>`;
-          if(nB===0){
-            inner+=`<div style="font-size:13px;font-weight:700;color:#9a8470;text-align:center;">Fraction B is 0 — division by zero is undefined.</div>`;
-          } else {
-            inner+=answerHTML(sign*rawNum,rawDen,CR)+signRuleHTML(sign);
-            inner+=`<div class="fp-legend">`;
-            for(let i=0;i<Math.min(fullGroups+(remainder>0?1:0),GROUP_PAL.length);i++){
-              inner+=`<div class="fp-litem"><div class="fp-lswatch" style="background:${i<fullGroups?GROUP_PAL[i%GROUP_PAL.length]:CO};${i===fullGroups?'opacity:.8;':''}"></div>${i<fullGroups?`Group ${i+1}`:'Remainder'}</div>`;
-            }
-            inner+=`<div class="fp-litem"><div style="width:24px;height:3px;background:${CR};border-radius:2px;"></div>Group count</div></div>`;
-            MR.say(`Count the brackets above the bar — each one is a full group of B fitting inside A. That count <b>is</b> the answer.`);
-            MR.addSimplify(rawNum, rawDen);
-          }
-        }
-        resultArea().innerHTML=`<div class="fp-result">${inner}</div>`;
-      }
-
       document.getElementById('solveBtn').addEventListener('click',function(){
-        if(activeOp==='+'||activeOp==='-') startWalk(); else solveMulDiv();
+        if(activeOp==='÷'&&SB.n===0){
+          wt=null;
+          resultArea().innerHTML=`<div class="fp-result"><div class="fp-wt-say stop" style="max-width:560px;">Fraction B is 0. Dividing asks how many groups of B fit inside A — and groups of nothing never fill anything up. Dividing by zero is <b>undefined</b>: it has no answer.</div></div>`;
+          MR.say('Dividing by zero has no answer — give Fraction B some shaded pieces.');
+          return;
+        }
+        startWalk();
       });
 
       document.querySelectorAll('.fp-opbtn').forEach(btn=>{
@@ -8370,8 +8428,8 @@ filter:opacity(0.15)"></div>
           const msgs={
             '+':'Adding counts pieces together, so the pieces must be the same size first. Press Solve and watch.',
             '-':'Same rule as adding: match the piece size first, then take B\'s pieces away from A\'s.',
-            '×':'Multiplying is the easy one — just multiply tops together and bottoms together. Watch the grid!',
-            '÷':'Division flips the second fraction and multiplies. How many times does B fit inside A?'
+            '×':'Multiplying means taking A <b>of</b> B. Press Solve and watch one square get cut both ways.',
+            '÷':'Dividing asks how many times B fits inside A. Press Solve and count the groups.'
           };
           MR.say(msgs[activeOp]||''); MR.m.operate++; MR.fire('operate', { op: activeOp });
         });
