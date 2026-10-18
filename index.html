@@ -1201,6 +1201,14 @@
       color: var(--brown-hint);
       margin-top: 4px;
     }
+    /* Phones: the three columns may shrink below their longest label, and the
+       labels wrap, instead of pushing "1 Mr. Fraction" past the screen edge */
+    @media (max-width: 480px) {
+      .stats-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .stat-item { padding: 14px 6px; }
+      .stat-value { font-size: 26px; }
+      .stat-label { font-size: 10px; letter-spacing: 0.05em; overflow-wrap: anywhere; }
+    }
 
     /* ============================================================
        PHASE 3 — LESSON PAGE
@@ -2267,6 +2275,17 @@
       flex-shrink: 0; transition: all 0.15s;
     }
     .ff-clockout-btn:hover { background: var(--steel-edge); border-color: var(--hazard); }
+    /* Phones: the header can't fit Mr. Fraction, the title and Clock Out on one
+       line — the button used to be pushed past the screen edge (only 3px of it
+       showed on a 320px phone). It now wraps onto its own line, right-aligned. */
+    @media (max-width: 700px) {
+      .ff-control-bar { flex-wrap: wrap; padding: 18px 16px 16px; gap: 12px; }
+      .ff-control-left { flex: 1 1 100%; min-width: 0; gap: 12px; }
+      .ff-control-meta { min-width: 0; }
+      .ff-control-thumb { width: 60px; height: 60px; }
+      .ff-control-title { font-size: 28px; }
+      .ff-clockout-btn { margin-left: auto; }
+    }
 
     /* --- Hazard tape strip under the header --- */
     .ff-hazard-tape {
@@ -3166,6 +3185,12 @@
     @media (max-width:480px){
       .ff-bd-cell { width:24px; height:38px; font-size:22px; }
       .ff-bd-pre, .ff-bd-tail { font-size:22px; }
+      /* The digit cells share the width that is actually there, up to 24px
+         each, so a long repeating decimal can't run past the screen edge.
+         The two-class selector beats the touch-screen 30px minimum below. */
+      .ff-bd-out { flex: 1 1 100%; min-width: 0; }
+      .ff-bd-strip { flex: 0 1 auto; min-width: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 24px); }
+      .ff-bd-strip .ff-bd-cell { width: auto; min-width: 0; }
     }
 
     /* ============================================================
