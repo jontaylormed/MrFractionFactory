@@ -291,6 +291,104 @@
     }
     .nav-btn .nav-icon { font-size: 14px; }
 
+    /* --- Top-right tools: For Teachers + Reading & Access --- */
+    .nav-tools { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    .nav-teach { border-style:dashed; }
+    .ra-btn {
+      display:flex; align-items:center; gap:8px; min-height:42px;
+      padding:6px 16px 6px 8px; border-radius:24px; cursor:pointer;
+      border:2px solid #9a5a12; background:#f2b24c; color:#2c2214;
+      font-family:var(--font-body); font-size:14px; font-weight:700; white-space:nowrap;
+      box-shadow:0 2px 0 #9a5a12;
+    }
+    .ra-btn:hover { background:#f6c26c; }
+    .ra-btn[aria-expanded="true"] { background:#2c2214; color:#fff; border-color:#2c2214; box-shadow:none; }
+    .ra-btn-icon { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%;
+      background:#fff; color:#2c2214; font-family:var(--font-serif); font-size:14px; font-weight:700; }
+
+    /* --- Reading & Access popout --- */
+    .ra-panel {
+      position:fixed; top:76px; right:16px; z-index:400;
+      width:min(390px, calc(100vw - 24px)); max-height:calc(100vh - 92px); overflow:auto;
+      background:#fff; color:#2c2214; border:2px solid #2c2214; border-radius:14px;
+      box-shadow:0 12px 40px rgba(44,34,20,.28); padding:16px 18px 18px;
+      font-family:var(--font-body);
+    }
+    .ra-panel[hidden] { display:none; }
+    .ra-head { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+    .ra-title { flex:1; font-family:var(--font-display); font-size:22px; font-weight:400; letter-spacing:.03em; }
+    .ra-close { min-height:40px; padding:6px 14px; border-radius:8px; border:2px solid #2c2214; background:#fff;
+      font:inherit; font-size:14px; font-weight:700; cursor:pointer; }
+    .ra-group { padding:12px 0; border-top:1.5px solid #e6dccb; }
+    .ra-h { font-size:14px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; margin-bottom:8px; color:#5a3e28; }
+    .ra-sub { font-size:12px; font-weight:700; color:#5a3e28; margin:10px 0 6px; }
+    .ra-row { display:flex; flex-wrap:wrap; gap:6px; }
+    .ra-row + .ra-row { margin-top:8px; }
+    .ra-opt { display:inline-flex; align-items:center; gap:6px; min-height:40px; padding:6px 12px; border-radius:8px;
+      border:2px solid #c8b89a; background:#fdf8f0; color:#2c2214; font:inherit; font-size:14px; font-weight:700; cursor:pointer; }
+    .ra-opt:hover { border-color:#5a3e28; }
+    .ra-opt[aria-pressed="true"] { background:#2c2214; border-color:#2c2214; color:#fff; }
+    .ra-opt:disabled { opacity:.4; cursor:not-allowed; }
+    .ra-stop { border-color:#c0392b; color:#c0392b; }
+    .ra-f-round { font-family:'Trebuchet MS',Verdana,'Segoe UI',system-ui,sans-serif; }
+    .ra-f-dys { font-family:'OpenDyslexic','Open Dyslexic','Comic Sans MS','Atkinson Hyperlegible',Verdana,sans-serif; }
+    .ra-sw { width:16px; height:16px; border-radius:4px; border:1.5px solid rgba(0,0,0,.3); }
+    .ra-note { font-size:12.5px; color:#5a3e28; margin-top:8px; line-height:1.5; }
+    .ra-foot { border-top:1.5px solid #e6dccb; padding-top:12px; }
+    .ra-panel kbd, .tch-list kbd { font-family:inherit; font-size:.9em; font-weight:700; padding:1px 6px; border:1.5px solid #c8b89a; border-bottom-width:3px; border-radius:5px; background:#fdf8f0; }
+    .ra-panel :focus-visible, .ra-btn:focus-visible { outline:3px solid #c96a1f; outline-offset:2px; }
+    /* small phones: shorter labels, so logo + both tools fit one row. The full
+       names stay in the accessible names (aria-label / visible "Teachers"). */
+    @media (max-width: 480px) {
+      .nav-logo-text, .nav-teach-for, .ra-btn-more { display:none; }
+    }
+
+    /* reading ruler: two dimming bands leave a clear window to read through */
+    .ra-ruler { position:fixed; left:0; right:0; z-index:350; background:rgba(20,14,6,.42); pointer-events:none; }
+    .ra-ruler[hidden] { display:none; }
+
+    /* --- What each setting does to the page --- */
+    /* Text size: most sizes in this file are px, so scaling the root font
+       would reach almost nothing. zoom scales a whole region, px included. */
+    html[data-size="125"] .page, html[data-size="125"] .mr-companion { zoom:1.25; }
+    html[data-size="150"] .page, html[data-size="150"] .mr-companion { zoom:1.5; }
+    /* enlarged text on a phone: let the station header and the standards pills
+       shrink and wrap instead of running off the right edge */
+    html[data-size] .station-header-left, html[data-size] .station-meta,
+    html[data-size] .ff-control-left, html[data-size] .ff-control-meta { min-width:0; }
+    html[data-size] .rbm-speed, html[data-size] .rbm-speed-btns { flex-wrap:wrap; min-width:0; }
+    html[data-size] .ff-match-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+    html[data-size] .ff-match-item { min-width:0; overflow-wrap:anywhere; }
+    html[data-size] .tch-std { white-space:normal; }
+    html[data-spacing="loose"] :is(p, li, td, label, .mr-speech-bubble, .fp-wt-say, .station-desc, .card-title, .tch-targets li) {
+      line-height:2 !important; letter-spacing:.06em !important; word-spacing:.16em !important;
+    }
+    html[data-contrast="high"] {
+      --brown-mid:#2c2214; --brown-muted:#3b2a18; --brown-hint:#4d3826;
+      --border:#6e5638; --border-light:#8d7454; --shadow:rgba(0,0,0,.25);
+    }
+    html[data-contrast="high"] .fp { --dy-muted:#3b2a18; --dy-hint:#4d3826; --dy-border:#6e5638; }
+    html[data-contrast="high"] body { color:#1a1208; }
+    html[data-contrast="high"] a { text-decoration:underline; }
+    html[data-contrast="high"] .card, html[data-contrast="high"] .nav-btn { border-color:#6e5638; }
+    /* Reduce motion: animations jump to their end state instead of being
+       removed, so anything that fades IN still ends up visible. */
+    html[data-motion="reduce"] *, html[data-motion="reduce"] *::before, html[data-motion="reduce"] *::after {
+      animation-duration:.001s !important; animation-iteration-count:1 !important; animation-delay:0s !important;
+      transition-duration:.001s !important; transition-delay:0s !important; scroll-behavior:auto !important;
+    }
+
+    /* --- For Teachers page --- */
+    .tch-p { font-size:15px; line-height:1.7; margin-bottom:10px; max-width:72ch; }
+    .tch-station { margin-top:18px; }
+    .tch-h { font-size:15px; font-weight:700; color:var(--brown-dark); margin-bottom:6px; padding-bottom:4px; border-bottom:1.5px solid var(--border-light); }
+    .tch-targets, .tch-list { list-style:none; display:flex; flex-direction:column; gap:8px; }
+    .tch-targets li { position:relative; padding:8px 12px 8px 34px; background:var(--cream-light); border:1.5px solid var(--border-light); border-radius:var(--radius-sm); font-size:15px; line-height:1.6; }
+    .tch-targets li::before { content:'✓'; position:absolute; left:12px; top:8px; font-weight:700; color:var(--teal); }
+    .tch-std { display:inline-block; margin-left:6px; padding:1px 8px; border-radius:12px; background:var(--teal-pale); color:var(--teal); font-size:12px; font-weight:700; letter-spacing:.03em; white-space:nowrap; }
+    .tch-list li { font-size:15px; line-height:1.7; padding-left:18px; position:relative; }
+    .tch-list li::before { content:'•'; position:absolute; left:2px; color:var(--orange); font-weight:700; }
+
     /* --- Page Wrapper (all content pages) --- */
     .page {
       display: none;
@@ -2372,6 +2470,11 @@
       }
       .nav-links::-webkit-scrollbar { display: none; }
       .nav-btn { padding: 7px 12px; font-size: 12px; }
+      /* logo + tools on the first row; the station links scroll on their own row */
+      .nav-bar { flex-wrap: wrap; }
+      .nav-links { order: 3; width: 100%; }
+      .ra-btn { font-size: 13px; padding: 5px 12px 5px 6px; }
+      .ra-panel { top: auto; bottom: 12px; right: 12px; max-height: calc(100vh - 24px); }
 
       /* Home hero: stack the text over Mr. Fraction, centered */
       .home-hero { flex-direction: column; align-items: center; text-align: center; padding: 28px 20px 24px; gap: 14px; }
@@ -3516,6 +3619,17 @@
         <span class="nav-icon">🏭</span> Factory Floor
       </button>
     </div>
+    <!-- Outside .nav-links on purpose: on a phone the station links scroll
+         sideways, and these two must never scroll out of reach. -->
+    <div class="nav-tools">
+      <button class="nav-btn nav-teach" id="nav-teachers" type="button" onclick="showPage('teachers')">
+        <span class="nav-icon" aria-hidden="true">🎓</span><span class="nav-teach-for">For </span>Teachers
+      </button>
+      <button class="ra-btn" id="ra-open" type="button" aria-expanded="false" aria-controls="ra-panel"
+              aria-label="Reading and access settings: read aloud, text size, typeface, colours, motion. Also opens with Alt and A.">
+        <span class="ra-btn-icon" aria-hidden="true">Aa</span><span>Reading<span class="ra-btn-more"> &amp; Access</span></span>
+      </button>
+    </div>
   </nav>
 
   <!-- Ticker below nav (light version) -->
@@ -4349,6 +4463,226 @@ filter:opacity(0.15)"></div>
   </div><!-- /page-factory -->
 
   <!-- ============================================================
+       PAGE: FOR TEACHERS
+       Learning targets, routes through the site, and what the site
+       does and does not do. Mr. Fraction stays off this page.
+       ============================================================ -->
+  <div class="page" id="page-teachers">
+    <div class="station-header">
+      <div class="station-header-left">
+        <img src="Mr__Fraction_Front.png" alt="" class="station-thumb">
+        <div class="station-meta">
+          <div class="station-label">For Teachers</div>
+          <div class="station-title">Learning Targets &amp; Guide</div>
+          <div class="station-desc">What each station teaches, how to route students through it, and what the site does and doesn't do.</div>
+        </div>
+      </div>
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+    </div>
+    <div class="content-area">
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-icon">🏭</span> What this is</div>
+        <p class="tch-p">A practice space for fractions, decimals and percents, built for middle school and for students who need to <em>see</em> the fraction. Five stations treat a fraction, its decimal and its percent as <strong>one number written three ways</strong>. Mr. Fraction coaches from the corner, responding to what each student actually does.</p>
+        <p class="tch-p"><strong>Nothing is graded and nothing is saved.</strong> There are no accounts, no tracking and no network requests — the site works offline once loaded, and closing the tab clears everything. The Factory Floor ends with a certificate students can show you.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-icon">🎯</span> Learning targets</div>
+        <p class="tch-p">Written as student "I can" statements, each tagged with the closest Common Core standard. Share them with students before a station, or use them as exit-ticket prompts.</p>
+
+        <div class="tch-station">
+          <h3 class="tch-h">Station 01 — Job Training · Bay A: What Fractions Are</h3>
+          <ul class="tch-targets">
+            <li>I can explain what the numerator and the denominator each tell me about a whole. <span class="tch-std">3.NF.1</span></li>
+            <li>I can tell proper fractions, improper fractions and whole numbers apart. <span class="tch-std">4.NF.3</span></li>
+            <li>I can make equivalent fractions and show why they are the same amount. <span class="tch-std">4.NF.1</span></li>
+            <li>I can place and compare fractions — including negative fractions — on a number line. <span class="tch-std">3.NF.2 · 6.NS.6c · 6.NS.7</span></li>
+            <li>I can predict whether a fraction's decimal stops or repeats by looking at its denominator. <span class="tch-std">7.NS.2d</span></li>
+          </ul>
+        </div>
+
+        <div class="tch-station">
+          <h3 class="tch-h">Station 01 — Job Training · Bay B: Working With Fractions</h3>
+          <ul class="tch-targets">
+            <li>I can rewrite an improper fraction as a mixed number, and back again. <span class="tch-std">4.NF.3b</span></li>
+            <li>I can find the greatest common factor of two numbers. <span class="tch-std">6.NS.4</span></li>
+            <li>I can add and subtract fractions with unlike denominators by re-cutting them to the same size pieces. <span class="tch-std">5.NF.1</span></li>
+            <li>I can write a fraction as a percent by re-cutting it into hundredths. <span class="tch-std">6.RP.3c</span></li>
+            <li>I can multiply fractions and explain the answer with an area model. <span class="tch-std">5.NF.4</span></li>
+            <li>I can divide fractions by asking "how many of these fit inside that?" <span class="tch-std">6.NS.1</span></li>
+          </ul>
+        </div>
+
+        <div class="tch-station">
+          <h3 class="tch-h">Station 01 — Division Workshop (optional)</h3>
+          <ul class="tch-targets">
+            <li>I can explain long division as dealing out into groups and exchanging leftovers for smaller place values. <span class="tch-std">5.NBT.1 · 6.NS.2 · 6.NS.3</span></li>
+          </ul>
+        </div>
+
+        <div class="tch-station">
+          <h3 class="tch-h">Station 02 — Simplifier</h3>
+          <ul class="tch-targets">
+            <li>I can simplify a fraction to lowest terms using the greatest common factor. <span class="tch-std">6.NS.4</span></li>
+            <li>I can explain why simplifying changes the numbers but not the amount. <span class="tch-std">4.NF.1</span></li>
+          </ul>
+        </div>
+
+        <div class="tch-station">
+          <h3 class="tch-h">Station 03 — Operations</h3>
+          <ul class="tch-targets">
+            <li>I can add, subtract, multiply and divide fractions and explain each step. <span class="tch-std">5.NF.1 · 5.NF.4 · 6.NS.1</span></li>
+            <li>I can find a common piece size (the LCD) before adding or subtracting. <span class="tch-std">5.NF.1</span></li>
+            <li>I can add and subtract negative fractions as moves on a number line. <span class="tch-std">7.NS.1</span></li>
+            <li>I can use the sign rules to multiply and divide negative fractions. <span class="tch-std">7.NS.2a · 7.NS.2b</span></li>
+          </ul>
+        </div>
+
+        <div class="tch-station">
+          <h3 class="tch-h">Station 04 — Converter</h3>
+          <ul class="tch-targets">
+            <li>I can convert between fractions, decimals and percents. <span class="tch-std">6.RP.3c · 7.NS.2d</span></li>
+            <li>I can use long division to explain why some decimals repeat forever. <span class="tch-std">7.NS.2d</span></li>
+          </ul>
+        </div>
+
+        <div class="tch-station">
+          <h3 class="tch-h">Station 05 — Factory Floor (Assessment Bay)</h3>
+          <ul class="tch-targets">
+            <li>I can show the targets above on my own, across nine challenges in four tiers: sorting and comparing, simplifying, operating, and converting — including writing a repeating decimal with the bar in the right place.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-icon">🧭</span> Suggested routes</div>
+        <ul class="tch-list">
+          <li><strong>New to fractions:</strong> Bay A → Simplifier → Converter.</li>
+          <li><strong>Ready to operate:</strong> Bay B → Operations. Every operation walks through its steps before showing the answer.</li>
+          <li><strong>Shaky on long division:</strong> the Division Workshop. It also opens from a <em>Shaky on division?</em> button inside the stations that need it, and returns students to where they were.</li>
+          <li><strong>Check-up:</strong> the Factory Floor. A shift only ships at 100%, and every challenge offers <em>Try Again</em>.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-icon">♿</span> Supports built in</div>
+        <ul class="tch-list">
+          <li><strong>Reading &amp; Access</strong> (top right, or <kbd>Alt</kbd> + <kbd>A</kbd>): read aloud — the page, Mr. Fraction's words, or any selected text, with an option to read Mr. Fraction automatically — plus typeface, text size, page tint, line spacing, high contrast, reduced motion and a reading ruler.</li>
+          <li><strong>Dyslexia-friendly by default:</strong> Atkinson Hyperlegible type, left-aligned text, colour never the only signal.</li>
+          <li><strong>Mr. Fraction's hints</strong> narrow after repeated wrong answers, then state the rule outright rather than asking again.</li>
+          <li>Settings last for the whole visit and reset when the page is reloaded.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div><!-- /page-teachers -->
+
+  <!-- ============================================================
+       READING & ACCESS — the popout, the reading-ruler bands, and a
+       live region for announcing changes to screen-reader users.
+       ============================================================ -->
+  <div class="ra-ruler" id="ra-ruler-top" hidden></div>
+  <div class="ra-ruler" id="ra-ruler-bottom" hidden></div>
+  <div class="sr-only" id="ra-live" aria-live="polite"></div>
+  <aside class="ra-panel" id="ra-panel" role="dialog" aria-labelledby="ra-title" hidden>
+    <div class="ra-head">
+      <h2 class="ra-title" id="ra-title">Reading &amp; Access</h2>
+      <button type="button" class="ra-close" id="ra-close">Close ✕</button>
+    </div>
+
+    <section class="ra-group" aria-labelledby="ra-h-read">
+      <h3 class="ra-h" id="ra-h-read">🔊 Read aloud</h3>
+      <div class="ra-row">
+        <button type="button" class="ra-opt" id="ra-read-page">Read this page</button>
+        <button type="button" class="ra-opt" id="ra-read-mr">Read Mr. Fraction</button>
+        <button type="button" class="ra-opt" id="ra-read-sel">Read what I selected</button>
+        <button type="button" class="ra-opt ra-stop" id="ra-stop">⏹ Stop</button>
+      </div>
+      <div class="ra-sub">Speed</div>
+      <div class="ra-row" role="group" aria-label="Reading speed" data-ra="rate">
+        <button type="button" class="ra-opt" data-v="0.75" aria-pressed="false">Slow</button>
+        <button type="button" class="ra-opt" data-v="1" aria-pressed="true">Normal</button>
+        <button type="button" class="ra-opt" data-v="1.25" aria-pressed="false">Fast</button>
+      </div>
+      <div class="ra-row" role="group" aria-label="Read Mr. Fraction automatically" data-ra="auto">
+        <button type="button" class="ra-opt" data-v="off" aria-pressed="true">Mr. Fraction: read when I ask</button>
+        <button type="button" class="ra-opt" data-v="on" aria-pressed="false">Read him aloud automatically</button>
+      </div>
+      <p class="ra-note" id="ra-speak-note">To read part of a page, highlight it first, then press “Read what I selected”.</p>
+    </section>
+
+    <section class="ra-group" aria-labelledby="ra-h-font">
+      <h3 class="ra-h" id="ra-h-font">Typeface</h3>
+      <div class="ra-row" role="group" aria-labelledby="ra-h-font" data-ra="font">
+        <button type="button" class="ra-opt" data-v="standard" aria-pressed="true">Standard</button>
+        <button type="button" class="ra-opt ra-f-round" data-v="rounded" aria-pressed="false">Rounded</button>
+        <button type="button" class="ra-opt ra-f-dys" data-v="dyslexic" aria-pressed="false">Dyslexia-friendly</button>
+      </div>
+      <p class="ra-note">Pick whichever is easiest for you to read. There is no “correct” one.</p>
+    </section>
+
+    <section class="ra-group" aria-labelledby="ra-h-size">
+      <h3 class="ra-h" id="ra-h-size">Text size</h3>
+      <div class="ra-row" role="group" aria-labelledby="ra-h-size" data-ra="size">
+        <button type="button" class="ra-opt" data-v="100" aria-pressed="true">100%</button>
+        <button type="button" class="ra-opt" data-v="125" aria-pressed="false">125%</button>
+        <button type="button" class="ra-opt" data-v="150" aria-pressed="false">150%</button>
+      </div>
+    </section>
+
+    <section class="ra-group" aria-labelledby="ra-h-tint">
+      <h3 class="ra-h" id="ra-h-tint">Page tint</h3>
+      <div class="ra-row" role="group" aria-labelledby="ra-h-tint" data-ra="tint">
+        <button type="button" class="ra-opt" data-v="none" aria-pressed="true"><span class="ra-sw" style="background:#f5ede0"></span>Cream</button>
+        <button type="button" class="ra-opt" data-v="peach" aria-pressed="false"><span class="ra-sw" style="background:#FBEFE2"></span>Peach</button>
+        <button type="button" class="ra-opt" data-v="blue" aria-pressed="false"><span class="ra-sw" style="background:#EDF2F8"></span>Blue</button>
+        <button type="button" class="ra-opt" data-v="green" aria-pressed="false"><span class="ra-sw" style="background:#EDF4EE"></span>Green</button>
+        <button type="button" class="ra-opt" data-v="grey" aria-pressed="false"><span class="ra-sw" style="background:#F0EFED"></span>Grey</button>
+      </div>
+    </section>
+
+    <section class="ra-group" aria-labelledby="ra-h-space">
+      <h3 class="ra-h" id="ra-h-space">Line spacing</h3>
+      <div class="ra-row" role="group" aria-labelledby="ra-h-space" data-ra="spacing">
+        <button type="button" class="ra-opt" data-v="normal" aria-pressed="true">Normal</button>
+        <button type="button" class="ra-opt" data-v="loose" aria-pressed="false">Extra space</button>
+      </div>
+    </section>
+
+    <section class="ra-group" aria-labelledby="ra-h-con">
+      <h3 class="ra-h" id="ra-h-con">Contrast</h3>
+      <div class="ra-row" role="group" aria-labelledby="ra-h-con" data-ra="contrast">
+        <button type="button" class="ra-opt" data-v="normal" aria-pressed="true">Normal</button>
+        <button type="button" class="ra-opt" data-v="high" aria-pressed="false">High contrast</button>
+      </div>
+    </section>
+
+    <section class="ra-group" aria-labelledby="ra-h-motion">
+      <h3 class="ra-h" id="ra-h-motion">Motion</h3>
+      <div class="ra-row" role="group" aria-labelledby="ra-h-motion" data-ra="motion">
+        <button type="button" class="ra-opt" data-v="normal" aria-pressed="true">Animations on</button>
+        <button type="button" class="ra-opt" data-v="reduce" aria-pressed="false">Reduce motion</button>
+      </div>
+      <p class="ra-note">Stops the spinning gears, bobbing and sliding.</p>
+    </section>
+
+    <section class="ra-group" aria-labelledby="ra-h-ruler">
+      <h3 class="ra-h" id="ra-h-ruler">Reading ruler</h3>
+      <div class="ra-row" role="group" aria-labelledby="ra-h-ruler" data-ra="ruler">
+        <button type="button" class="ra-opt" data-v="off" aria-pressed="true">Off</button>
+        <button type="button" class="ra-opt" data-v="on" aria-pressed="false">On</button>
+      </div>
+      <p class="ra-note">Dims everything except a band that follows your pointer. With a keyboard, move it with ↑ and ↓.</p>
+    </section>
+
+    <div class="ra-foot">
+      <button type="button" class="ra-opt" id="ra-reset">↺ Reset all</button>
+      <p class="ra-note">These reset when you reload. Press <kbd>Alt</kbd> + <kbd>A</kbd> to open this panel any time.</p>
+    </div>
+  </aside>
+
+  <!-- ============================================================
        MR. FRACTION COMPANION
        ============================================================ -->
   <div class="mr-companion hidden" id="mr-companion">
@@ -4505,7 +4839,7 @@ filter:opacity(0.15)"></div>
     }
 
     /* ---- PAGE NAVIGATION ---- */
-    const PAGES = ['home','lesson','simplify','operate','convert','factory'];
+    const PAGES = ['home','lesson','simplify','operate','convert','factory','teachers'];
 
     let cvActivePage = 'home';
     window.showPage = function(id) {
@@ -4515,9 +4849,9 @@ filter:opacity(0.15)"></div>
         const nb = document.getElementById('nav-'+p);
         if (nb) nb.classList.toggle('active', p===id);
       });
-      // Mr. Fraction companion: hide on home, show on others
+      // Mr. Fraction companion: hide on home and on the teachers' page, show on the stations
       const comp = document.getElementById('mr-companion');
-      if (id === 'home') {
+      if (id === 'home' || id === 'teachers') {
         comp.classList.add('hidden');
       } else {
         comp.classList.remove('hidden');
@@ -10637,6 +10971,260 @@ filter:opacity(0.15)"></div>
 
     })(); // end Factory Floor
 
+  })();
+
+  /* ============================================================
+     READING & ACCESS
+     Read aloud, typeface, text size, tint, line spacing, contrast,
+     motion and a reading ruler. Modelled on the Word Express's
+     panel (same focus handling, same DOM-walking read-aloud).
+
+     Settings are kept in memory only — the site stores nothing — so
+     they last the whole visit (it is one page) and reset on reload.
+     Every setting is written to <html> as a data- attribute or a CSS
+     variable; the CSS beside .ra-panel says what each one does.
+     ============================================================ */
+  (function(){
+    'use strict';
+    const root = document.documentElement;
+    const $ = id => document.getElementById(id);
+    const synth = window.speechSynthesis || null;
+
+    const FONTS = {
+      standard: null,
+      rounded:  "'Trebuchet MS',Verdana,'Segoe UI',system-ui,sans-serif",
+      dyslexic: "'OpenDyslexic','Open Dyslexic','Comic Sans MS','Atkinson Hyperlegible',Verdana,sans-serif"
+    };
+    // The tints are paper, not a film over everything: they replace the cream.
+    const TINTS = {
+      none:  null,
+      peach: { cream:'#FBEFE2', mid:'#F4E4D2', light:'#FDF4EA' },
+      blue:  { cream:'#EDF2F8', mid:'#E1E9F3', light:'#F3F7FC' },
+      green: { cream:'#EDF4EE', mid:'#E0EBE2', light:'#F3F9F4' },
+      grey:  { cream:'#F0EFED', mid:'#E4E2DF', light:'#F6F5F3' }
+    };
+    const systemReduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const DEFAULTS = { rate:'1', auto:'off', font:'standard', size:'100', tint:'none',
+                       spacing:'normal', contrast:'normal', motion: systemReduce ? 'reduce' : 'normal', ruler:'off' };
+    const state = Object.assign({}, DEFAULTS);
+
+    let panel, opener, live;
+
+    function announce(msg){
+      if (!live) return;
+      live.textContent = '';
+      setTimeout(() => { live.textContent = msg; }, 60);
+    }
+
+    /* ---------- applying settings ---------- */
+    function apply(){
+      if (FONTS[state.font]) root.style.setProperty('--font-body', FONTS[state.font]);
+      else root.style.removeProperty('--font-body');
+
+      const t = TINTS[state.tint];
+      if (t){
+        root.style.setProperty('--cream', t.cream);
+        root.style.setProperty('--cream-mid', t.mid);
+        root.style.setProperty('--cream-light', t.light);
+      } else ['--cream','--cream-mid','--cream-light'].forEach(k => root.style.removeProperty(k));
+
+      const attr = (name, on, val) => on ? root.setAttribute(name, val) : root.removeAttribute(name);
+      attr('data-size', state.size !== '100', state.size);
+      attr('data-spacing', state.spacing === 'loose', 'loose');
+      attr('data-contrast', state.contrast === 'high', 'high');
+      attr('data-motion', state.motion === 'reduce', 'reduce');
+      drawRuler();
+
+      // reflect every group's choice in its buttons
+      document.querySelectorAll('#ra-panel [data-ra]').forEach(g => {
+        const key = g.getAttribute('data-ra');
+        g.querySelectorAll('[data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.getAttribute('data-v') === state[key])));
+      });
+    }
+
+    const SAY = {
+      font:     v => 'Typeface: ' + ({standard:'standard', rounded:'rounded', dyslexic:'dyslexia-friendly'}[v]) + '.',
+      size:     v => 'Text size ' + v + ' percent.',
+      tint:     v => 'Page tint: ' + (v === 'none' ? 'cream' : v) + '.',
+      spacing:  v => v === 'loose' ? 'Extra line spacing on.' : 'Normal line spacing.',
+      contrast: v => v === 'high' ? 'High contrast on.' : 'Normal contrast.',
+      motion:   v => v === 'reduce' ? 'Motion reduced.' : 'Animations on.',
+      ruler:    v => v === 'on' ? 'Reading ruler on. Move it with your pointer, or the up and down arrow keys.' : 'Reading ruler off.',
+      rate:     v => ({'0.75':'Slow', '1':'Normal', '1.25':'Fast'}[v]) + ' reading speed.',
+      auto:     v => v === 'on' ? 'Mr. Fraction will be read aloud automatically.' : 'Mr. Fraction will be read only when you ask.'
+    };
+
+    /* ---------- reading ruler ---------- */
+    let rulerY = 0.4;
+    const BAND = 130;   // px of clear reading window
+    function drawRuler(){
+      const top = $('ra-ruler-top'), bottom = $('ra-ruler-bottom');
+      if (!top || !bottom) return;
+      if (state.ruler !== 'on'){ top.hidden = true; bottom.hidden = true; return; }
+      const h = window.innerHeight, c = Math.min(1, Math.max(0, rulerY)) * h;
+      const band = Math.min(BAND, h * 0.5);   // never wider than half a short screen
+      const t = Math.max(0, c - band/2), b = Math.min(h, c + band/2);
+      top.hidden = false; bottom.hidden = false;
+      top.style.top = '0px';  top.style.height = t + 'px';
+      bottom.style.top = b + 'px'; bottom.style.height = Math.max(0, h - b) + 'px';
+    }
+
+    /* ---------- read aloud ----------
+       Walk the DOM instead of a fixed tag list, so buttons, labels and new
+       UI are read by default (the Word Express learned this the hard way). */
+    function collectSpeech(node){
+      const parts = []; let buf = [];
+      const flush = () => { const t = buf.join(' ').replace(/\s+/g,' ').trim(); if (t) parts.push(t); buf = []; };
+      (function walk(n){
+        if (n.nodeType === 3){ const t = n.nodeValue.replace(/\s+/g,' ').trim(); if (t) buf.push(t); return; }
+        if (n.nodeType !== 1) return;
+        if (n.hidden || n.getAttribute('aria-hidden') === 'true') return;
+        if (/^(SCRIPT|STYLE|SVG|svg|NOSCRIPT)$/.test(n.tagName)) return;
+        const cs = getComputedStyle(n);
+        if (cs.display === 'none' || cs.visibility === 'hidden') return;
+        if (n.classList && n.classList.contains('sr-only')) { flush(); parts.push(n.textContent.trim()); return; }
+        const block = cs.display !== 'inline';
+        if (block) flush();
+        for (let c = n.firstChild; c; c = c.nextSibling) walk(c);
+        if (block) flush();
+      })(node);
+      flush();
+      return parts.filter(Boolean);
+    }
+
+    // One utterance per chunk: Chrome stops long single utterances partway.
+    function speak(parts, what){
+      if (!synth){ announce('Read aloud is not available in this browser.'); return; }
+      synth.cancel();
+      const chunks = [];
+      parts.forEach(p => String(p).split(/(?<=[.!?])\s+/).forEach(s => { s = s.trim(); if (s) chunks.push(s); }));
+      if (!chunks.length){ announce('There is nothing to read' + (what ? ' — ' + what : '') + '.'); return; }
+      chunks.forEach(s => {
+        const u = new SpeechSynthesisUtterance(s);
+        u.rate = parseFloat(state.rate) || 1;
+        u.lang = 'en-US';
+        synth.speak(u);
+      });
+    }
+
+    function mrText(){
+      const comp = $('mr-companion'), b = $('mr-speech');
+      if (comp && !comp.classList.contains('hidden') && b && b.innerText.trim()) return b.innerText.trim();
+      // on the home page he speaks from the hero instead
+      const home = document.querySelector('#page-home.active .home-speech');
+      return home ? home.innerText.trim() : '';
+    }
+
+    // Remember the last real selection: pressing a button can collapse it.
+    let lastSelection = '';
+    document.addEventListener('selectionchange', () => {
+      const s = window.getSelection ? String(window.getSelection()).trim() : '';
+      if (s && !(panel && panel.contains(window.getSelection().anchorNode))) lastSelection = s;
+    });
+
+    /* Auto-read: one utterance per thing Mr. Fraction says. MR.say rewrites
+       the bubble several times in one go, so wait for it to settle. */
+    let autoTimer = null, lastAuto = '';
+    function watchMr(){
+      const b = $('mr-speech'); if (!b || !window.MutationObserver) return;
+      new MutationObserver(() => {
+        if (state.auto !== 'on') return;
+        clearTimeout(autoTimer);
+        autoTimer = setTimeout(() => {
+          const t = mrText();
+          if (t && t !== lastAuto){ lastAuto = t; speak([t]); }
+        }, 300);
+      }).observe(b, { childList:true, subtree:true, characterData:true });
+    }
+
+    /* ---------- open / close ---------- */
+    let lastFocus = null;
+    function openPanel(){
+      lastFocus = document.activeElement;
+      panel.hidden = false;
+      opener.setAttribute('aria-expanded', 'true');
+      const first = panel.querySelector('button');
+      if (first) first.focus();
+      document.addEventListener('keydown', onPanelKey, true);
+    }
+    function closePanel(){
+      panel.hidden = true;
+      opener.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('keydown', onPanelKey, true);
+      // Alt+A works from anywhere, so lastFocus may be <body>; fall back to the opener.
+      const ok = lastFocus && lastFocus.focus && /^(BUTTON|INPUT|TEXTAREA|SELECT|A)$/.test(lastFocus.tagName) && document.contains(lastFocus);
+      (ok ? lastFocus : opener).focus();
+    }
+    function onPanelKey(e){
+      if (e.key === 'Escape'){ e.preventDefault(); closePanel(); return; }
+      if (e.key !== 'Tab') return;
+      const f = [...panel.querySelectorAll('button:not(:disabled)')];
+      if (!f.length) return;
+      const first = f[0], last = f[f.length-1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+
+    function init(){
+      panel = $('ra-panel'); opener = $('ra-open'); live = $('ra-live');
+      if (!panel || !opener) return;
+
+      opener.addEventListener('click', () => panel.hidden ? openPanel() : closePanel());
+      $('ra-close').addEventListener('click', closePanel);
+      document.addEventListener('keydown', e => {
+        if (e.altKey && (e.key === 'a' || e.key === 'A')){ e.preventDefault(); panel.hidden ? openPanel() : closePanel(); }
+      });
+
+      // every option group works the same way
+      panel.addEventListener('click', e => {
+        const b = e.target.closest('[data-v]'); if (!b) return;
+        const g = b.closest('[data-ra]'); if (!g) return;
+        const key = g.getAttribute('data-ra'), v = b.getAttribute('data-v');
+        state[key] = v; apply();
+        if (SAY[key]) announce(SAY[key](v));
+      });
+
+      $('ra-read-page').addEventListener('click', () => {
+        const page = document.querySelector('.page.active');
+        speak(page ? collectSpeech(page) : [], 'this page is empty');
+        announce('Reading the page aloud.');
+      });
+      $('ra-read-mr').addEventListener('click', () => {
+        const t = mrText();
+        if (t) speak([t]); else announce('Mr. Fraction is not saying anything right now.');
+      });
+      $('ra-read-sel').addEventListener('click', () => {
+        const now = window.getSelection ? String(window.getSelection()).trim() : '';
+        const t = now || lastSelection;
+        if (t) speak([t]); else announce('Highlight some text on the page first, then press Read what I selected.');
+      });
+      $('ra-stop').addEventListener('click', () => { if (synth) synth.cancel(); announce('Stopped reading.'); });
+      $('ra-reset').addEventListener('click', () => {
+        Object.assign(state, DEFAULTS, { motion:'normal' });
+        if (systemReduce) state.motion = 'reduce';
+        apply(); announce('All reading and access settings reset.');
+      });
+
+      if (!synth){
+        ['ra-read-page','ra-read-mr','ra-read-sel','ra-stop'].forEach(id => { $(id).disabled = true; });
+        panel.querySelectorAll('[data-ra="rate"] button, [data-ra="auto"] button').forEach(b => { b.disabled = true; });
+        $('ra-speak-note').textContent = 'Read aloud is not available in this browser.';
+      }
+
+      document.addEventListener('mousemove', e => { if (state.ruler === 'on'){ rulerY = e.clientY / window.innerHeight; drawRuler(); } });
+      document.addEventListener('keydown', e => {
+        if (state.ruler !== 'on' || /input|textarea|select/i.test(e.target.tagName)) return;
+        if (e.key === 'ArrowDown'){ rulerY = Math.min(1, rulerY + 0.04); drawRuler(); }
+        else if (e.key === 'ArrowUp'){ rulerY = Math.max(0, rulerY - 0.04); drawRuler(); }
+      });
+      window.addEventListener('resize', drawRuler);
+
+      watchMr();
+      apply();
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
   })();
   </script>
 

@@ -20,7 +20,26 @@ Students enter through a loading screen (Mr. Fraction dancing), land on the fact
 | 04 | **Converter** | Change any value — fraction, decimal, or percent — and watch the others follow, with pie charts, number lines and percent bars side by side. Includes **The Remainder Belt**, a working long-division machine. |
 | 05 | **Assessment Bay** | Nine randomized, gamified challenges across four difficulty tiers. Ships only on 100% correctness, with "Try Again" on every challenge and a Certificate of Completion at the end. |
 
-Mr. Fraction appears at the bottom of every page except the home page.
+Mr. Fraction appears at the bottom of every station page.
+
+Two buttons at the top right of every page:
+
+- **🎓 For Teachers** opens a guide page: what the site is, the learning targets for every station, suggested routes for different students, and the supports built in.
+- **Reading & Access** opens the settings panel described [below](#reading--access). <kbd>Alt</kbd> + <kbd>A</kbd> also opens it.
+
+## Learning targets
+
+The For Teachers page lists these as student "I can" statements, each tagged with the closest Common Core standard:
+
+| Station | Targets | Standards |
+|---|---|---|
+| Job Training · Bay A | Explain what the numerator and denominator tell me; tell proper fractions, improper fractions and whole numbers apart; make and justify equivalent fractions; place and compare fractions, including negatives, on a number line; predict whether a decimal stops or repeats | 3.NF.1 · 4.NF.3 · 4.NF.1 · 3.NF.2 · 6.NS.6c · 6.NS.7 · 7.NS.2d |
+| Job Training · Bay B | Switch between improper fractions and mixed numbers; find a GCF; add and subtract with unlike denominators; write a fraction as a percent; multiply with an area model; divide as "how many fit" | 4.NF.3b · 6.NS.4 · 5.NF.1 · 6.RP.3c · 5.NF.4 · 6.NS.1 |
+| Division Workshop | Explain long division as dealing out and exchanging leftovers for smaller place values | 5.NBT.1 · 6.NS.2 · 6.NS.3 |
+| Simplifier | Simplify to lowest terms with the GCF, and explain why the amount doesn't change | 6.NS.4 · 4.NF.1 |
+| Operations | Add, subtract, multiply and divide fractions and explain each step; find the LCD; add and subtract negatives on a number line; use the sign rules | 5.NF.1 · 5.NF.4 · 6.NS.1 · 7.NS.1 · 7.NS.2a–b |
+| Converter | Convert between fractions, decimals and percents; explain repeating decimals with long division | 6.RP.3c · 7.NS.2d |
+| Factory Floor | Show all of the above independently, across nine challenges in four tiers | — |
 
 ## Inside Job Training
 
@@ -86,6 +105,10 @@ Composite factors are staged, because a student who cannot spot 6 can usually sp
 
 > *"I asked a repeating decimal when it would be finished. Still waiting."*
 
+## Classroom testing
+
+The site has been tried with a few students and a teacher. Their responses were positive, and the site generated general interest. Their feedback led directly to the Station 03 rebuild below, the pizza fix in Bay A, and the Reading & Access panel.
+
 ## Station 03, rebuilt after classroom feedback
 
 A teacher and their students found the first version of Operations hard to read. Each change below answers something they reported:
@@ -105,6 +128,22 @@ A teacher and their students found the first version of Operations hard to read.
 - **Discovery is withheld, not announced.** The Sevenths Wheel will not tell you the pattern until you have checked all six.
 - **Dialogue does real work.** Mr. Fraction runs on a small learner model built only from what a student actually does — which fractions they explore, how many terminating versus repeating cases they meet, their prediction accuracy, whether they have been through the workshop. Probes are computed from their own history. After repeated wrong answers he narrows the question, then states the rule outright rather than asking a fifth riddle.
 - **Pedagogical accuracy is non-negotiable.** The multiplication area model uses a dynamic multi-unit grid so improper fractions are handled correctly. There is exactly one long-division implementation in the file, shared by every machine that needs it.
+
+## Reading & Access
+
+A panel opened from the top right of every page, or with <kbd>Alt</kbd> + <kbd>A</kbd>. Every option works on every page:
+
+- **Read aloud.** Students can have the whole page read, just what Mr. Fraction is saying, or any text they highlight. There's a Stop button and three speeds, and an option to read Mr. Fraction aloud automatically every time he speaks. It uses the browser's built-in speech, so no audio files are involved. Text is read in short chunks, because some browsers cut off long passages partway.
+- **Typeface:** Standard (Atkinson Hyperlegible), Rounded, or Dyslexia-friendly. The last one uses OpenDyslexic when the device has it installed, and a similar font otherwise.
+- **Text size:** 100%, 125% or 150%.
+- **Page tint:** cream, peach, blue, green or grey. The tint replaces the page colour instead of laying a film over it.
+- **Line spacing:** normal or extra.
+- **High contrast:** darker text and stronger borders.
+- **Reduce motion:** stops the spinning gears, bobbing and sliding. It is switched on automatically when the device asks for reduced motion.
+- **Reading ruler:** dims everything except a band that follows the pointer, or the ↑ and ↓ keys.
+- **Reset all.**
+
+Settings last for the whole visit and reset on reload. The site stores nothing on the device.
 
 ## Accessibility notes
 
@@ -152,6 +191,12 @@ Don't rename these or change their extensions — the file references them direc
 ### Updating the site
 
 Commit the change and `git push` to `main`. The Pages workflow deploys it within a minute or two. Avoid GitHub's drag-and-drop uploader, which silently flattens folders and would break `assets/fonts/`. GitHub Pages caches aggressively at this file size, so hard-refresh (Ctrl/Cmd + Shift + R) before deciding something is broken.
+
+## Credits
+
+Site created by Claude and Jon Taylor.
+
+Mr. Fraction's Factory was designed and coded by Claude, Anthropic's AI model, across many working sessions, including the Station 03 rebuild, the For Teachers page and the Reading & Access panel.
 
 ## License
 
