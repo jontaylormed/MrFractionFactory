@@ -139,7 +139,7 @@ A panel opened from the top right of every page, or with <kbd>Alt</kbd> + <kbd>A
 - **Page tint:** cream, peach, blue, green or grey. The tint replaces the page colour instead of laying a film over it.
 - **Line spacing:** normal or extra.
 - **High contrast:** darker text and stronger borders.
-- **Reduce motion:** stops the spinning gears, bobbing and sliding. It is switched on automatically when the device asks for reduced motion.
+- **Reduce motion:** stops the spinning gears, bobbing and sliding. It is off until a student chooses it. The site deliberately does **not** follow the computer's own "animation effects" setting, which is often switched off on school machines. Following it once meant a whole class lost the Factory Floor's box-closing reward without anyone choosing that.
 - **Reading ruler:** dims everything except a band that follows the pointer, or the ↑ and ↓ keys.
 - **Reset all.**
 

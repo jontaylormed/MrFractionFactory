@@ -1040,9 +1040,6 @@
       0%, 100% { transform: translateY(0); }
       50%      { transform: translateY(-7px); }
     }
-    @media (prefers-reduced-motion: reduce) {
-      .home-factory-scene img { animation: none; }
-    }
     @keyframes hero-float {
       0%, 100% { transform: translateY(0); }
       50%       { transform: translateY(-12px); }
@@ -2530,13 +2527,10 @@
     }
     @keyframes ff-tag-in { from { transform: translateY(-6px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-    @media (prefers-reduced-motion: reduce) {
-      #page-factory .ff-box,
-      #page-factory .ff-flap,
-      #page-factory .ff-tape,
-      #page-factory .ff-stamp,
-      #page-factory .ff-shipped-tag { animation: none !important; }
-    }
+    /* No reduced-motion gate here on purpose: the ship-off is every student's
+       reward, and many school computers ship with "animation effects" off, so
+       gating on that setting left most of a class with only a green message.
+       A student who wants less motion can choose it in Reading & Access. */
 
     /* Mr. Fraction companion bubble tweak on dark floor handled globally */
 
@@ -4755,7 +4749,7 @@ filter:opacity(0.15)"></div>
         <button type="button" class="ra-opt" data-v="normal" aria-pressed="true">Animations on</button>
         <button type="button" class="ra-opt" data-v="reduce" aria-pressed="false">Reduce motion</button>
       </div>
-      <p class="ra-note">Stops the spinning gears, bobbing and sliding.</p>
+      <p class="ra-note">Stops the spinning gears, bobbing and sliding. Animations are on unless you choose this.</p>
     </section>
 
     <section class="ra-group" aria-labelledby="ra-h-ruler">
@@ -10239,8 +10233,8 @@ filter:opacity(0.15)"></div>
       function ffShip(cid) {
         const panel = document.getElementById('ff-' + cid);
         if (!panel) return;
-        const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reduce) { ffSeal(panel); return; }
+        // Plays on every computer — it is no longer skipped when the machine's
+        // "animation effects" setting is off (common on school computers).
         const ov = document.createElement('div');
         ov.className = 'ff-ship-overlay';
         ov.innerHTML =
@@ -11118,9 +11112,11 @@ filter:opacity(0.15)"></div>
       green: { cream:'#EDF4EE', mid:'#E0EBE2', light:'#F3F9F4' },
       grey:  { cream:'#F0EFED', mid:'#E4E2DF', light:'#F6F5F3' }
     };
-    const systemReduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    // Motion starts ON for everyone. It used to follow the computer's
+    // "animation effects" setting, which is often off on school machines, so
+    // whole classes lost the animations without anyone choosing that.
     const DEFAULTS = { rate:'1', auto:'off', font:'standard', size:'100', tint:'none',
-                       spacing:'normal', contrast:'normal', motion: systemReduce ? 'reduce' : 'normal', ruler:'off' };
+                       spacing:'normal', contrast:'normal', motion:'normal', ruler:'off' };
     const state = Object.assign({}, DEFAULTS);
 
     let panel, opener, live;
@@ -11315,8 +11311,7 @@ filter:opacity(0.15)"></div>
       });
       $('ra-stop').addEventListener('click', () => { if (synth) synth.cancel(); announce('Stopped reading.'); });
       $('ra-reset').addEventListener('click', () => {
-        Object.assign(state, DEFAULTS, { motion:'normal' });
-        if (systemReduce) state.motion = 'reduce';
+        Object.assign(state, DEFAULTS);
         apply(); announce('All reading and access settings reset.');
       });
 
